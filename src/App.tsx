@@ -1,9 +1,18 @@
-import Home from './pages/Home'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import Pokedex from './pages/Pokedex';
+import PokemonInfo from './pages/PokemonInfo';
 
 function App() {
   return (
-    <Home />
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/pokedex" element={<Pokedex />} />
+        <Route path="/pokemon/:id" element={<PokemonInfo />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
