@@ -5,9 +5,9 @@ import type {
   ChainLink,
   FlavorText,
   PokemonList,
-} from '../types/pokemon';
+} from "../types/pokemon";
 
-const BASE_URL = 'https://pokeapi.co/api/v2';
+const BASE_URL = import.meta.env.VITE_POKEAPI_BASE_URL;
 
 /**
  * Fetches data from a given URL or endpoint.
@@ -26,15 +26,22 @@ async function fetchData<T>(url: string): Promise<T> {
  * @param limit The number of Pokemon to fetch (default is 20).
  * @param offset The number of Pokemon to skip (default is 0).
  */
-export async function getPokemonList(limit: number = 20, offset: number = 0): Promise<PokemonList> {
-  return fetchData<PokemonList>(`${BASE_URL}/pokemon?limit=${limit}&offset=${offset}`);
+export async function getPokemonList(
+  limit: number = 20,
+  offset: number = 0,
+): Promise<PokemonList> {
+  return fetchData<PokemonList>(
+    `${BASE_URL}/pokemon?limit=${limit}&offset=${offset}`,
+  );
 }
 
 /**
  * Fetches detailed information about a Pokemon.
  * @param nameOrId The name or ID of the Pokemon.
  */
-export async function getPokemon(nameOrId: string | number): Promise<PokemonDetail> {
+export async function getPokemon(
+  nameOrId: string | number,
+): Promise<PokemonDetail> {
   return fetchData<PokemonDetail>(`${BASE_URL}/pokemon/${nameOrId}`);
 }
 
@@ -42,7 +49,9 @@ export async function getPokemon(nameOrId: string | number): Promise<PokemonDeta
  * Fetches species information about a Pokemon.
  * @param nameOrId The name or ID of the Pokemon.
  */
-export async function getPokemonSpecies(nameOrId: string | number): Promise<PokemonSpecies> {
+export async function getPokemonSpecies(
+  nameOrId: string | number,
+): Promise<PokemonSpecies> {
   return fetchData<PokemonSpecies>(`${BASE_URL}/pokemon-species/${nameOrId}`);
 }
 
@@ -50,7 +59,9 @@ export async function getPokemonSpecies(nameOrId: string | number): Promise<Poke
  * Fetches an evolution chain by its ID.
  * @param id The ID of the evolution chain.
  */
-export async function getEvolutionChainById(id: number): Promise<EvolutionChain> {
+export async function getEvolutionChainById(
+  id: number,
+): Promise<EvolutionChain> {
   return fetchData<EvolutionChain>(`${BASE_URL}/evolution-chain/${id}`);
 }
 
@@ -58,7 +69,9 @@ export async function getEvolutionChainById(id: number): Promise<EvolutionChain>
  * Fetches an evolution chain by its full URL.
  * @param url The full URL of the evolution chain.
  */
-export async function getEvolutionChainByUrl(url: string): Promise<EvolutionChain> {
+export async function getEvolutionChainByUrl(
+  url: string,
+): Promise<EvolutionChain> {
   return fetchData<EvolutionChain>(url);
 }
 
@@ -85,14 +98,19 @@ export function flattenEvolutionChain(chain: ChainLink): string[] {
  * @param entries The list of flavor text entries.
  * @param lang The language code (default is 'en').
  */
-export function getRandomFlavorText(entries: FlavorText[], lang: string = 'en'): string {
-  const filteredEntries = entries.filter((entry) => entry.language.name === lang);
+export function getRandomFlavorText(
+  entries: FlavorText[],
+  lang: string = "en",
+): string {
+  const filteredEntries = entries.filter(
+    (entry) => entry.language.name === lang,
+  );
 
   if (filteredEntries.length === 0) {
-    return 'No description available.';
+    return "No description available.";
   }
 
   const randomIndex = Math.floor(Math.random() * filteredEntries.length);
   // Replace escape characters like \n and \f with spaces for better display
-  return filteredEntries[randomIndex].flavor_text.replace(/[\n\f]/g, ' ');
+  return filteredEntries[randomIndex].flavor_text.replace(/[\n\f]/g, " ");
 }
