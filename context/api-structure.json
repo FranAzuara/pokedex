@@ -1,0 +1,256 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "PokeAPI Unified Specification",
+    "description": "Documentación técnica unificada que integra datos de Pokémon, Especies y Cadenas Evolutivas. Permite obtener desde estadísticas base hasta descripciones localizadas y lógica de evolución recursiva.",
+    "version": "2.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://pokeapi.co/api/v2",
+      "description": "Servidor principal de PokeAPI"
+    }
+  ],
+  "paths": {
+    "/pokemon/{name_or_id}": {
+      "get": {
+        "tags": ["Pokemon"],
+        "summary": "Datos técnicos, estadísticas y habilidades.",
+        "parameters": [
+          {
+            "name": "name_or_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "oneOf": [{ "type": "string" }, { "type": "integer" }]
+            },
+            "example": "bulbasaur"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Datos técnicos recuperados.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PokemonDetail"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pokemon-species/{name_or_id}": {
+      "get": {
+        "tags": ["Species"],
+        "summary": "Datos biográficos, textos descriptivos y enlace de evolución.",
+        "parameters": [
+          {
+            "name": "name_or_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "oneOf": [{ "type": "string" }, { "type": "integer" }]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Datos de especie y textos descriptivos.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PokemonSpecies"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/evolution-chain/{id}": {
+      "get": {
+        "tags": ["Evolution"],
+        "summary": "Cadena evolutiva completa (Estructura recursiva).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Estructura de evolución completa.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvolutionChain"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PokemonDetail": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "example": 1 },
+          "name": { "type": "string", "example": "bulbasaur" },
+          "base_experience": { "type": "integer", "example": 64 },
+          "height": {
+            "type": "integer",
+            "description": "Decímetros",
+            "example": 7
+          },
+          "weight": {
+            "type": "integer",
+            "description": "Hectogramos",
+            "example": 69
+          },
+          "types": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/TypeEntry" }
+          },
+          "stats": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/StatEntry" }
+          },
+          "abilities": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AbilityEntry" }
+          },
+          "sprites": {
+            "type": "object",
+            "properties": {
+              "front_default": { "type": "string", "format": "uri" }
+            }
+          }
+        }
+      },
+      "TypeEntry": {
+        "type": "object",
+        "properties": {
+          "slot": { "type": "integer" },
+          "type": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "url": { "type": "string" }
+            }
+          }
+        }
+      },
+      "StatEntry": {
+        "type": "object",
+        "properties": {
+          "base_stat": { "type": "integer" },
+          "stat": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" }
+            }
+          }
+        }
+      },
+      "AbilityEntry": {
+        "type": "object",
+        "properties": {
+          "is_hidden": { "type": "boolean" },
+          "ability": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "url": { "type": "string" }
+            }
+          }
+        }
+      },
+      "PokemonSpecies": {
+        "type": "object",
+        "properties": {
+          "evolution_chain": {
+            "type": "object",
+            "properties": {
+              "url": { "type": "string", "format": "uri" }
+            }
+          },
+          "flavor_text_entries": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/FlavorText" }
+          }
+        }
+      },
+      "FlavorText": {
+        "type": "object",
+        "properties": {
+          "flavor_text": { "type": "string" },
+          "language": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Filtra por 'es' o 'en'"
+              }
+            }
+          }
+        }
+      },
+      "EvolutionChain": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "chain": { "$ref": "#/components/schemas/ChainLink" }
+        }
+      },
+      "ChainLink": {
+        "type": "object",
+        "properties": {
+          "is_baby": { "type": "boolean" },
+          "species": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "url": { "type": "string" }
+            }
+          },
+          "evolution_details": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/EvolutionDetail" }
+          },
+          "evolves_to": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ChainLink" }
+          }
+        }
+      },
+      "EvolutionDetail": {
+        "type": "object",
+        "properties": {
+          "trigger": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" }
+            }
+          },
+          "min_level": { "type": "integer", "nullable": true },
+          "item": {
+            "type": "object",
+            "nullable": true,
+            "properties": {
+              "name": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

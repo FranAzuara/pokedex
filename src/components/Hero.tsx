@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router";
 
 const Hero: React.FC = () => {
   return (
@@ -24,9 +25,12 @@ const Hero: React.FC = () => {
                   data.
                 </h2>
               </div>
-              <button className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base transition-transform duration-200 hover:scale-105 border-none">
+              <Link
+                to="/pokedex"
+                className="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 @[480px]:h-12 @[480px]:px-5 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] @[480px]:text-base transition-transform duration-200 hover:scale-105 border-none"
+              >
                 <span className="truncate">Explore the Pokedex</span>
-              </button>
+              </Link>
             </div>
           </div>
         </div>
