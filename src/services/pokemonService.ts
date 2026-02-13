@@ -1,0 +1,88 @@
+import type {
+  PokemonDetail,
+  PokemonSpecies,
+  EvolutionChain,
+  ChainLink,
+  FlavorText
+} from '../types/pokemon';
+
+const BASE_URL = 'https://pokeapi.co/api/v2';
+
+/**
+ * Fetches data from a given URL or endpoint.
+ * This helper function follows the Single Responsibility Principle by handling the fetch logic.
+ */
+async function fetchData<T>(url: string): Promise<T> {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch from ${url}: ${response.statusText}`);
+  }
+  return response.json();
+}
+
+/**
+ * Fetches detailed information about a Pokemon.
+ * @param nameOrId The name or ID of the Pokemon.
+ */
+export async function getPokemon(nameOrId: string | number): Promise<PokemonDetail> {
+  return fetchData<PokemonDetail>(`${BASE_URL}/pokemon/${nameOrId}`);
+}
+
+/**
+ * Fetches species information about a Pokemon.
+ * @param nameOrId The name or ID of the Pokemon.
+ */
+export async function getPokemonSpecies(nameOrId: string | number): Promise<PokemonSpecies> {
+  return fetchData<PokemonSpecies>(`${BASE_URL}/pokemon-species/${nameOrId}`);
+}
+
+/**
+ * Fetches an evolution chain by its ID.
+ * @param id The ID of the evolution chain.
+ */
+export async function getEvolutionChainById(id: number): Promise<EvolutionChain> {
+  return fetchData<EvolutionChain>(`${BASE_URL}/evolution-chain/${id}`);
+}
+
+/**
+ * Fetches an evolution chain by its full URL.
+ * @param url The full URL of the evolution chain.
+ */
+export async function getEvolutionChainByUrl(url: string): Promise<EvolutionChain> {
+  return fetchData<EvolutionChain>(url);
+}
+
+/**
+ * Recursively flattens the evolution chain into a list of Pokemon names.
+ * This follows the instruction to return a flat list of names.
+ * @param chain The evolution chain link.
+ */
+export function flattenEvolutionChain(chain: ChainLink): string[] {
+  let names: string[] = [chain.species.name];
+
+  if (chain.evolves_to && chain.evolves_to.length > 0) {
+    chain.evolves_to.forEach((nextLink) => {
+      names = [...names, ...flattenEvolutionChain(nextLink)];
+    });
+  }
+
+  return names;
+}
+
+/**
+ * Returns a random flavor text entry in the specified language.
+ * This satisfies the requirement for a random English description on each click/load.
+ * @param entries The list of flavor text entries.
+ * @param lang The language code (default is 'en').
+ */
+export function getRandomFlavorText(entries: FlavorText[], lang: string = 'en'): string {
+  const filteredEntries = entries.filter((entry) => entry.language.name === lang);
+
+  if (filteredEntries.length === 0) {
+    return 'No description available.';
+  }
+
+  const randomIndex = Math.floor(Math.random() * filteredEntries.length);
+  // Replace escape characters like \n and \f with spaces for better display
+  return filteredEntries[randomIndex].flavor_text.replace(/[\n\f]/g, ' ');
+}
