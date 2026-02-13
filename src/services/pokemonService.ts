@@ -4,7 +4,6 @@ import type {
   EvolutionChain,
   ChainLink,
   FlavorText,
-  PokemonListResponse
 } from '../types/pokemon';
 
 const BASE_URL = 'https://pokeapi.co/api/v2';
@@ -86,13 +85,4 @@ export function getRandomFlavorText(entries: FlavorText[], lang: string = 'en'):
   const randomIndex = Math.floor(Math.random() * filteredEntries.length);
   // Replace escape characters like \n and \f with spaces for better display
   return filteredEntries[randomIndex].flavor_text.replace(/[\n\f]/g, ' ');
-}
-
-/**
- * Fetches a paginated list of Pokemon names and URLs.
- * @param limit The number of items to fetch.
- * @param offset The number of items to skip.
- */
-export async function getPokemonList(limit: number = 20, offset: number = 0): Promise<PokemonListResponse> {
-  return fetchData<PokemonListResponse>(`${BASE_URL}/pokemon?limit=${limit}&offset=${offset}`);
 }
