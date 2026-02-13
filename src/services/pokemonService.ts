@@ -4,6 +4,7 @@ import type {
   EvolutionChain,
   ChainLink,
   FlavorText,
+  PokemonList,
 } from '../types/pokemon';
 
 const BASE_URL = 'https://pokeapi.co/api/v2';
@@ -18,6 +19,15 @@ async function fetchData<T>(url: string): Promise<T> {
     throw new Error(`Failed to fetch from ${url}: ${response.statusText}`);
   }
   return response.json();
+}
+
+/**
+ * Fetches a paginated list of Pokemon.
+ * @param limit The number of Pokemon to fetch (default is 20).
+ * @param offset The number of Pokemon to skip (default is 0).
+ */
+export async function getPokemonList(limit: number = 20, offset: number = 0): Promise<PokemonList> {
+  return fetchData<PokemonList>(`${BASE_URL}/pokemon?limit=${limit}&offset=${offset}`);
 }
 
 /**

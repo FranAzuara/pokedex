@@ -131,6 +131,24 @@
   },
   "components": {
     "schemas": {
+      "PokemonList": {
+        "type": "object",
+        "properties": {
+          "count": { "type": "integer" },
+          "next": { "type": "string", "format": "uri", "nullable": true },
+          "previous": { "type": "string", "format": "uri", "nullable": true },
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "url": { "type": "string", "format": "uri" }
+              }
+            }
+          }
+        }
+      },
       "PokemonDetail": {
         "type": "object",
         "properties": {
