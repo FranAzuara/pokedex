@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { getPokemonList } from "../services/pokemonService";
+import { getPokemonSpeciesList } from "../services/pokemonService";
 
 const SearchBar: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -12,7 +12,9 @@ const SearchBar: React.FC = () => {
   useEffect(() => {
     const fetchAllPokemon = async () => {
       try {
-        const data = await getPokemonList(1500, 0);
+        // Fetching from species list ensures we only get "normal" forms
+        // The total number of species is currently around 1025
+        const data = await getPokemonSpeciesList(1500, 0);
         setAllPokemon(data.results.map((p) => p.name));
       } catch (error) {
         console.error("Error fetching Pokémon list for search:", error);

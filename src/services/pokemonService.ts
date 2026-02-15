@@ -43,6 +43,20 @@ export async function getPokemonList(
 }
 
 /**
+ * Fetches a paginated list of Pokemon species.
+ * @param limit The number of species to fetch.
+ * @param offset The number of species to skip.
+ */
+export async function getPokemonSpeciesList(
+  limit: number = 20,
+  offset: number = 0,
+): Promise<PokemonList> {
+  return fetchData<PokemonList>(
+    `${BASE_URL}/pokemon-species?limit=${limit}&offset=${offset}`,
+  );
+}
+
+/**
  * Fetches detailed information about a Pokemon.
  * @param nameOrId The name or ID of the Pokemon.
  */
