@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 const Pokedex: React.FC = () => {
   return (
-    <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+    <div className="relative flex min-h-screen w-full flex-col overflow-x-clip">
       <div className="layout-container flex h-full grow flex-col">
         <Navbar />
         <main className="flex-grow">
