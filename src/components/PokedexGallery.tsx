@@ -67,15 +67,15 @@ const PokedexGallery: React.FC = () => {
   }
 
   return (
-    <div ref={galleryRef} className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-5">
-      <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
-        {loading ? (
-          <div className="flex justify-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
-          </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(158px,1fr))] gap-4 px-4">
+    <div ref={galleryRef} className="w-full flex flex-col items-center">
+      <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-5 w-full">
+        <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
+          {loading ? (
+            <div className="flex justify-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(158px,1fr))] gap-4 px-4 pb-10">
               {pokemonList.map((pokemon) => (
                 <PokedexCard
                   key={pokemon.id}
@@ -86,17 +86,19 @@ const PokedexGallery: React.FC = () => {
                 />
               ))}
             </div>
-
-            {totalPages > 1 && (
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
-            )}
-          </>
-        )}
+          )}
+        </div>
       </div>
+
+      {totalPages > 1 && (
+        <div className="sticky bottom-0 w-full py-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 z-10 flex justify-center">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </div>
+      )}
     </div>
   );
 };
