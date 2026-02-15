@@ -1,25 +1,61 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PokedexCard from './PokedexCard';
-
-const mockPokemon = [
-  { id: '1', name: 'Bulbasaur', image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png', types: ['Grass', 'Poison'] },
-  { id: '2', name: 'Ivysaur', image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png', types: ['Grass', 'Poison'] },
-  { id: '3', name: 'Venusaur', image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png', types: ['Grass', 'Poison'] },
-  { id: '4', name: 'Charmander', image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/4.png', types: ['Fire'] },
-  { id: '5', name: 'Charmeleon', image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/5.png', types: ['Fire'] },
-  { id: '6', name: 'Charizard', image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png', types: ['Fire', 'Flying'] },
-  { id: '7', name: 'Squirtle', image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png', types: ['Water'] },
-  { id: '8', name: 'Wartortle', image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/8.png', types: ['Water'] },
-  { id: '9', name: 'Blastoise', image: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/9.png', types: ['Water'] },
-];
+import { getPokemonList, getPokemon } from '../services/pokemonService';
+import type { PokemonDetail } from '../types/pokemon';
 
 const PokedexGallery: React.FC = () => {
+  const [pokemonList, setPokemonList] = useState<PokemonDetail[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchAllPokemon = async () => {
+      try {
+        setLoading(true);
+        const listData = await getPokemonList(20, 0);
+        const detailedPokemon = await Promise.all(
+          listData.results.map((p) => getPokemon(p.name))
+        );
+        setPokemonList(detailedPokemon);
+      } catch (err) {
+        setError('Failed to load Pokémon. Please try again later.');
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllPokemon();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-10">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex justify-center py-10 text-red-500">
+        {error}
+      </div>
+    );
+  }
+
   return (
     <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-5">
       <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
         <div className="grid grid-cols-[repeat(auto-fill,minmax(158px,1fr))] gap-4 px-4">
-          {mockPokemon.map((pokemon) => (
-            <PokedexCard key={pokemon.id} {...pokemon} />
+          {pokemonList.map((pokemon) => (
+            <PokedexCard
+              key={pokemon.id}
+              id={pokemon.id.toString()}
+              name={pokemon.name}
+              image={pokemon.sprites.other?.['official-artwork']?.front_default || pokemon.sprites.front_default}
+              types={pokemon.types.map((t) => t.type.name)}
+            />
           ))}
         </div>
       </div>

@@ -19,10 +19,10 @@ const PokemonEvolutionChain: React.FC<PokemonEvolutionChainProps> = ({ evolution
           {evolutions.map((step, index) => (
             <React.Fragment key={step.name}>
               <div className="flex flex-col items-center gap-4">
-                <div className="size-40 md:size-48 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center p-6 border-4 border-white dark:border-gray-900 shadow-xl">
-                  <img src={step.image} alt={step.name} className="w-full h-auto" />
+                <div className="size-40 md:size-48 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center p-6 border-4 border-white dark:border-gray-900 shadow-xl overflow-hidden">
+                  <img src={step.image} alt={step.name} className="w-full h-auto object-contain" />
                 </div>
-                <p className="text-lg font-bold text-gray-900 dark:text-white">{step.name}</p>
+                <p className="text-lg font-bold text-gray-900 dark:text-white capitalize">{step.name}</p>
               </div>
               {index < evolutions.length - 1 && (
                 <div className="flex flex-col items-center gap-2">
