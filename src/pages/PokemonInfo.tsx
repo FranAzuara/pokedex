@@ -1,53 +1,87 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import PokemonDescription from "../components/PokemonDescription";
 import PokemonDetails from "../components/PokemonDetails";
 import PokemonEvolutionChain from "../components/PokemonEvolutionChain";
-import { Link } from "react-router-dom";
+import {
+  getPokemon,
+  getPokemonSpecies,
+  getEvolutionChainByUrl,
+  flattenEvolutionChain,
+  getRandomFlavorText,
+} from "../services/pokemonService";
+import type { PokemonDetail, PokemonSpecies } from "../types/pokemon";
 
 const PokemonInfo: React.FC = () => {
-  // Mock data for Bulbasaur (id 1)
-  const bulbasaurData = {
-    id: "1",
-    name: "Bulbasaur",
-    image:
-      "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-    description:
-      "There is a plant seed on its back right from the day this Pokémon is born. The seed slowly grows larger.",
-    types: ["Grass", "Poison"],
-    height: "0.7 m (2'04\")",
-    weight: "6.9 kg (15.2 lbs)",
-    abilities: ["Overgrow"],
-    hiddenAbility: "Chlorophyll",
-    stats: [
-      { name: "HP", value: 45 },
-      { name: "Attack", value: 49 },
-      { name: "Defense", value: 49 },
-      { name: "Sp. Atk", value: 65 },
-      { name: "Sp. Def", value: 65 },
-      { name: "Speed", value: 45 },
-    ],
-    evolutions: [
-      {
-        name: "Bulbasaur",
-        image:
-          "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png",
-      },
-      {
-        name: "Ivysaur",
-        image:
-          "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/2.png",
-        level: 16,
-      },
-      {
-        name: "Venusaur",
-        image:
-          "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/3.png",
-        level: 32,
-      },
-    ],
-  };
+  const { id } = useParams<{ id: string }>();
+  const [pokemon, setPokemon] = useState<PokemonDetail | null>(null);
+  const [species, setSpecies] = useState<PokemonSpecies | null>(null);
+  const [evolutions, setEvolutions] = useState<{ name: string; image: string }[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!id) return;
+      try {
+        setLoading(true);
+        const pokemonData = await getPokemon(id);
+        const speciesData = await getPokemonSpecies(id);
+        const evolutionChainData = await getEvolutionChainByUrl(speciesData.evolution_chain.url);
+
+        const evolutionNames = flattenEvolutionChain(evolutionChainData.chain);
+        const evolutionDetails = await Promise.all(
+          evolutionNames.map(async (name) => {
+            const data = await getPokemon(name);
+            return {
+              name: data.name,
+              image: data.sprites.other?.["official-artwork"]?.front_default || data.sprites.front_default,
+            };
+          })
+        );
+
+        setPokemon(pokemonData);
+        setSpecies(speciesData);
+        setEvolutions(evolutionDetails);
+      } catch (err) {
+        setError("Failed to load Pokémon details.");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
+      </div>
+    );
+  }
+
+  if (error || !pokemon || !species) {
+    return (
+      <div className="flex justify-center items-center min-h-screen text-red-500">
+        {error || "Pokémon not found."}
+      </div>
+    );
+  }
+
+  const description = getRandomFlavorText(species.flavor_text_entries);
+  const abilities = pokemon.abilities
+    .filter((a) => !a.is_hidden)
+    .map((a) => a.ability.name);
+  const hiddenAbility = pokemon.abilities.find((a) => a.is_hidden)?.ability.name || "None";
+
+  const stats = pokemon.stats.map((s) => ({
+    name: s.stat.name.toUpperCase(),
+    value: s.base_stat,
+  }));
 
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-gray-50 dark:bg-[#111418]">
@@ -61,30 +95,30 @@ const PokemonInfo: React.FC = () => {
                   Pokédex
                 </Link>
                 <span>/</span>
-                <span className="text-gray-900 dark:text-white font-medium">
-                  {bulbasaurData.name}
+                <span className="text-gray-900 dark:text-white font-medium capitalize">
+                  {pokemon.name}
                 </span>
               </div>
             </div>
           </div>
 
           <PokemonDescription
-            id={bulbasaurData.id}
-            name={bulbasaurData.name}
-            image={bulbasaurData.image}
-            description={bulbasaurData.description}
-            types={bulbasaurData.types}
+            id={pokemon.id.toString()}
+            name={pokemon.name}
+            image={pokemon.sprites.other?.["official-artwork"]?.front_default || pokemon.sprites.front_default}
+            description={description}
+            types={pokemon.types.map((t) => t.type.name)}
           />
 
           <PokemonDetails
-            height={bulbasaurData.height}
-            weight={bulbasaurData.weight}
-            abilities={bulbasaurData.abilities}
-            hiddenAbility={bulbasaurData.hiddenAbility}
-            stats={bulbasaurData.stats}
+            height={`${pokemon.height / 10} m`}
+            weight={`${pokemon.weight / 10} kg`}
+            abilities={abilities}
+            hiddenAbility={hiddenAbility}
+            stats={stats}
           />
 
-          <PokemonEvolutionChain evolutions={bulbasaurData.evolutions} />
+          <PokemonEvolutionChain evolutions={evolutions} />
         </main>
         <Footer />
       </div>

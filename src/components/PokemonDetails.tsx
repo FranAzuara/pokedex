@@ -32,11 +32,11 @@ const PokemonDetails: React.FC<PokemonDetailsProps> = ({ height, weight, abiliti
               </div>
               <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-800">
                 <span className="text-gray-500 dark:text-gray-400 font-medium">Abilities</span>
-                <span className="text-gray-900 dark:text-white font-bold text-right">{abilities.join(', ')}</span>
+                <span className="text-gray-900 dark:text-white font-bold text-right capitalize">{abilities.join(', ')}</span>
               </div>
               <div className="flex justify-between py-2 border-b border-gray-100 dark:border-gray-800">
                 <span className="text-gray-500 dark:text-gray-400 font-medium">Hidden Ability</span>
-                <span className="text-gray-900 dark:text-white font-bold">{hiddenAbility}</span>
+                <span className="text-gray-900 dark:text-white font-bold capitalize">{hiddenAbility}</span>
               </div>
             </div>
           </div>
@@ -52,7 +52,7 @@ const PokemonDetails: React.FC<PokemonDetailsProps> = ({ height, weight, abiliti
                   <div className="flex-1 h-2 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-red-500 rounded-full"
-                      style={{ width: `${(stat.value / 255) * 100}%` }}
+                      style={{ width: `${Math.min((stat.value / 255) * 100, 100)}%` }}
                     ></div>
                   </div>
                 </div>

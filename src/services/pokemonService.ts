@@ -10,6 +10,13 @@ import type {
 const BASE_URL = import.meta.env.VITE_POKEAPI_BASE_URL;
 
 /**
+ * Evaluation of fetch vs axios:
+ * For this project, 'fetch' is used because it is native to modern browsers,
+ * which helps maintain a smaller bundle size and avoids external dependencies.
+ * While 'axios' offers features like automatic JSON parsing and better error handling,
+ * the 'fetchData' helper function below achieves similar results by centralizing
+ * the fetch logic and error checking, ensuring good readability and performance.
+ *
  * Fetches data from a given URL or endpoint.
  * This helper function follows the Single Responsibility Principle by handling the fetch logic.
  */
