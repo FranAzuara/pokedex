@@ -1,22 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import PokedexCard from './PokedexCard';
+import Pagination from './Pagination';
 import { getPokemonList, getPokemon } from '../services/pokemonService';
 import type { PokemonDetail } from '../types/pokemon';
+
+const ITEMS_PER_PAGE = 100;
 
 const PokedexGallery: React.FC = () => {
   const [pokemonList, setPokemonList] = useState<PokemonDetail[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalCount, setTotalCount] = useState<number>(0);
+
+  const galleryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const fetchAllPokemon = async () => {
+    const fetchPokemon = async () => {
       try {
         setLoading(true);
-        const listData = await getPokemonList(20, 0);
+        const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+        const listData = await getPokemonList(ITEMS_PER_PAGE, offset);
+
+        setTotalCount(listData.count);
+
         const detailedPokemon = await Promise.all(
           listData.results.map((p) => getPokemon(p.name))
         );
         setPokemonList(detailedPokemon);
+
+        // Scroll to top of gallery when page changes
+        if (galleryRef.current) {
+          galleryRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
       } catch (err) {
         setError('Failed to load Pokémon. Please try again later.');
         console.error(err);
@@ -25,10 +41,16 @@ const PokedexGallery: React.FC = () => {
       }
     };
 
-    fetchAllPokemon();
-  }, []);
+    fetchPokemon();
+  }, [currentPage]);
 
-  if (loading) {
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  if (loading && pokemonList.length === 0) {
     return (
       <div className="flex justify-center py-10">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
@@ -45,19 +67,35 @@ const PokedexGallery: React.FC = () => {
   }
 
   return (
-    <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-5">
+    <div ref={galleryRef} className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-5">
       <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(158px,1fr))] gap-4 px-4">
-          {pokemonList.map((pokemon) => (
-            <PokedexCard
-              key={pokemon.id}
-              id={pokemon.id.toString()}
-              name={pokemon.name}
-              image={pokemon.sprites.other?.['official-artwork']?.front_default || pokemon.sprites.front_default}
-              types={pokemon.types.map((t) => t.type.name)}
-            />
-          ))}
-        </div>
+        {loading ? (
+          <div className="flex justify-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-[repeat(auto-fill,minmax(158px,1fr))] gap-4 px-4">
+              {pokemonList.map((pokemon) => (
+                <PokedexCard
+                  key={pokemon.id}
+                  id={pokemon.id.toString()}
+                  name={pokemon.name}
+                  image={pokemon.sprites.other?.['official-artwork']?.front_default || pokemon.sprites.front_default}
+                  types={pokemon.types.map((t) => t.type.name)}
+                />
+              ))}
+            </div>
+
+            {totalPages > 1 && (
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            )}
+          </>
+        )}
       </div>
     </div>
   );
