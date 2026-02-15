@@ -67,7 +67,7 @@ const PokedexGallery: React.FC = () => {
   return (
     <div ref={galleryRef} className="w-full flex flex-col items-center">
       <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-5 w-full">
-        <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
+        <div className="layout-content-container flex flex-col max-w-240 flex-1">
           {loading ? (
             <div className="flex justify-center py-20">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
@@ -95,7 +95,7 @@ const PokedexGallery: React.FC = () => {
 
       {totalPages > 1 && (
         <div className="sticky bottom-0 w-full py-4 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 z-20 flex justify-center shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05),0_-2px_4px_-1px_rgba(0,0,0,0.03)]">
-          <div className="max-w-[960px] w-full px-4 flex justify-center">
+          <div className="max-w-240 w-full px-4 flex justify-center">
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}

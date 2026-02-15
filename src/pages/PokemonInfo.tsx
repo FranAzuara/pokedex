@@ -18,7 +18,9 @@ const PokemonInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [pokemon, setPokemon] = useState<PokemonDetail | null>(null);
   const [species, setSpecies] = useState<PokemonSpecies | null>(null);
-  const [evolutions, setEvolutions] = useState<{ name: string; image: string }[]>([]);
+  const [evolutions, setEvolutions] = useState<
+    { name: string; image: string }[]
+  >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,7 +31,9 @@ const PokemonInfo: React.FC = () => {
         setLoading(true);
         const pokemonData = await getPokemon(id);
         const speciesData = await getPokemonSpecies(id);
-        const evolutionChainData = await getEvolutionChainByUrl(speciesData.evolution_chain.url);
+        const evolutionChainData = await getEvolutionChainByUrl(
+          speciesData.evolution_chain.url,
+        );
 
         const evolutionNames = flattenEvolutionChain(evolutionChainData.chain);
         const evolutionDetails = await Promise.all(
@@ -37,9 +41,11 @@ const PokemonInfo: React.FC = () => {
             const data = await getPokemon(name);
             return {
               name: data.name,
-              image: data.sprites.other?.["official-artwork"]?.front_default || data.sprites.front_default,
+              image:
+                data.sprites.other?.["official-artwork"]?.front_default ||
+                data.sprites.front_default,
             };
-          })
+          }),
         );
 
         setPokemon(pokemonData);
@@ -76,7 +82,8 @@ const PokemonInfo: React.FC = () => {
   const abilities = pokemon.abilities
     .filter((a) => !a.is_hidden)
     .map((a) => a.ability.name);
-  const hiddenAbility = pokemon.abilities.find((a) => a.is_hidden)?.ability.name || "None";
+  const hiddenAbility =
+    pokemon.abilities.find((a) => a.is_hidden)?.ability.name || "None";
 
   const stats = pokemon.stats.map((s) => ({
     name: s.stat.name.toUpperCase(),
@@ -87,9 +94,9 @@ const PokemonInfo: React.FC = () => {
     <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-gray-50 dark:bg-[#111418]">
       <div className="layout-container flex h-full grow flex-col">
         <Navbar />
-        <main className="flex-grow pb-12">
+        <main className="grow pb-12">
           <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-2">
-            <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
+            <div className="layout-content-container flex flex-col max-w-240 flex-1">
               <div className="flex items-center gap-2 px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
                 <Link to="/pokedex" className="hover:text-primary">
                   Pokédex
@@ -105,7 +112,10 @@ const PokemonInfo: React.FC = () => {
           <PokemonDescription
             id={pokemon.id.toString()}
             name={pokemon.name}
-            image={pokemon.sprites.other?.["official-artwork"]?.front_default || pokemon.sprites.front_default}
+            image={
+              pokemon.sprites.other?.["official-artwork"]?.front_default ||
+              pokemon.sprites.front_default
+            }
             description={description}
             types={pokemon.types.map((t) => t.type.name)}
           />
