@@ -7,7 +7,7 @@ import type {
   PokemonList,
 } from "../types/pokemon";
 
-const BASE_URL = import.meta.env.VITE_POKEAPI_BASE_URL;
+const BASE_URL = import.meta.env.VITE_POKEAPI_BASE_URL || "https://pokeapi.co/api/v2";
 
 /**
  * Evaluation of fetch vs axios:
@@ -44,11 +44,10 @@ export async function getPokemonList(
 
 /**
  * Fetches a paginated list of Pokemon species.
- * @param limit The number of species to fetch.
- * @param offset The number of species to skip.
+ * Used for the SearchBar suggestions.
  */
-export async function getPokemonSpeciesList(
-  limit: number = 20,
+export async function getPokemonSpeciesNames(
+  limit: number = 1500,
   offset: number = 0,
 ): Promise<PokemonList> {
   return fetchData<PokemonList>(
