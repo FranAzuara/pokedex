@@ -70,33 +70,48 @@ const PokedexGallery: React.FC = () => {
     <div ref={galleryRef} className="w-full flex flex-col items-center">
       <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-5 w-full">
         <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
+          {totalPages > 1 && (
+            <div className="py-4 flex justify-center border-b border-gray-100 dark:border-gray-800 mb-6">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            </div>
+          )}
+
           {loading ? (
             <div className="flex justify-center py-20">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
             </div>
           ) : (
-            <div className="grid grid-cols-[repeat(auto-fill,minmax(158px,1fr))] gap-4 px-4 pb-10">
-              {pokemonList.map((pokemon) => (
-                <PokedexCard
-                  key={pokemon.id}
-                  id={pokemon.id.toString()}
-                  name={pokemon.name}
-                  image={pokemon.sprites.other?.['official-artwork']?.front_default || pokemon.sprites.front_default}
-                  types={pokemon.types.map((t) => t.type.name)}
-                />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(158px,1fr))] gap-4 px-4 pb-10">
+                {pokemonList.map((pokemon) => (
+                  <PokedexCard
+                    key={pokemon.id}
+                    id={pokemon.id.toString()}
+                    name={pokemon.name}
+                    image={pokemon.sprites.other?.['official-artwork']?.front_default || pokemon.sprites.front_default}
+                    types={pokemon.types.map((t) => t.type.name)}
+                  />
+                ))}
+              </div>
+
+            </>
           )}
         </div>
       </div>
 
       {totalPages > 1 && (
-        <div className="sticky bottom-0 w-full py-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 z-10 flex justify-center">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+        <div className="sticky bottom-0 w-full py-4 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 z-20 flex justify-center shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05),0_-2px_4px_-1px_rgba(0,0,0,0.03)]">
+          <div className="max-w-[960px] w-full px-4 flex justify-center">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>
         </div>
       )}
     </div>
