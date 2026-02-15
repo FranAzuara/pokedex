@@ -1,8 +1,8 @@
-import React, { useEffect, useState, useRef } from 'react';
-import PokedexCard from './PokedexCard';
-import Pagination from './Pagination';
-import { getPokemonList, getPokemon } from '../services/pokemonService';
-import type { PokemonDetail } from '../types/pokemon';
+import React, { useEffect, useState, useRef } from "react";
+import PokedexCard from "./PokedexCard";
+import Pagination from "./Pagination";
+import { getPokemonList, getPokemon } from "../services/pokemonService";
+import type { PokemonDetail } from "../types/pokemon";
 
 const ITEMS_PER_PAGE = 100;
 
@@ -25,16 +25,16 @@ const PokedexGallery: React.FC = () => {
         setTotalCount(listData.count);
 
         const detailedPokemon = await Promise.all(
-          listData.results.map((p) => getPokemon(p.name))
+          listData.results.map((p) => getPokemon(p.name)),
         );
         setPokemonList(detailedPokemon);
 
         // Scroll to top of gallery when page changes
         if (galleryRef.current) {
-          galleryRef.current.scrollIntoView({ behavior: 'smooth' });
+          galleryRef.current.scrollIntoView({ behavior: "smooth" });
         }
       } catch (err) {
-        setError('Failed to load Pokémon. Please try again later.');
+        setError("Failed to load Pokémon. Please try again later.");
         console.error(err);
       } finally {
         setLoading(false);
@@ -60,9 +60,7 @@ const PokedexGallery: React.FC = () => {
 
   if (error) {
     return (
-      <div className="flex justify-center py-10 text-red-500">
-        {error}
-      </div>
+      <div className="flex justify-center py-10 text-red-500">{error}</div>
     );
   }
 
@@ -70,16 +68,6 @@ const PokedexGallery: React.FC = () => {
     <div ref={galleryRef} className="w-full flex flex-col items-center">
       <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-5 w-full">
         <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
-          {totalPages > 1 && (
-            <div className="py-4 flex justify-center border-b border-gray-100 dark:border-gray-800 mb-6">
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
-            </div>
-          )}
-
           {loading ? (
             <div className="flex justify-center py-20">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
@@ -92,12 +80,14 @@ const PokedexGallery: React.FC = () => {
                     key={pokemon.id}
                     id={pokemon.id.toString()}
                     name={pokemon.name}
-                    image={pokemon.sprites.other?.['official-artwork']?.front_default || pokemon.sprites.front_default}
+                    image={
+                      pokemon.sprites.other?.["official-artwork"]
+                        ?.front_default || pokemon.sprites.front_default
+                    }
                     types={pokemon.types.map((t) => t.type.name)}
                   />
                 ))}
               </div>
-
             </>
           )}
         </div>
