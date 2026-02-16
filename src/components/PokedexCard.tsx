@@ -6,11 +6,16 @@ interface PokedexCardProps {
   name: string;
   image: string;
   types: string[];
+  currentPage?: number;
 }
 
-const PokedexCard: React.FC<PokedexCardProps> = ({ id, name, image, types }) => {
+const PokedexCard: React.FC<PokedexCardProps> = ({ id, name, image, types, currentPage }) => {
   return (
-    <Link to={`/pokemon/${id}`} className="flex flex-col gap-3 pb-3 group">
+    <Link
+      to={`/pokemon/${id}`}
+      state={{ fromPage: currentPage }}
+      className="flex flex-col gap-3 pb-3 group"
+    >
       <div
         className="w-full bg-center bg-no-repeat aspect-square bg-contain rounded-xl transition-transform group-hover:scale-105"
         style={{ backgroundImage: `url(${image})`, backgroundColor: '#f3f4f6' }}
