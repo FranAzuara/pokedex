@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   return (
-    <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-5">
+    <div className="sticky top-0 z-50 w-full flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-1 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md shadow-sm">
       <div className="layout-content-container flex flex-col max-w-240 flex-1">
         <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 dark:border-gray-700 px-6 py-3">
           <Link
