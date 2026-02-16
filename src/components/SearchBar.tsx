@@ -1,23 +1,61 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPokemonSpeciesNames } from "../services/pokemonService";
 
-const VALID_HYPHENATED_NAMES = [
-  "nidoran-f", "nidoran-m", "mr-mime", "ho-oh", "mime-jr", "porygon-z",
-  "type-null", "jangmo-o", "hakamo-o", "kommo-o", "tapu-koko", "tapu-lele",
-  "tapu-bulu", "tapu-fini", "mr-rime", "great-tusk", "scream-tail",
-  "brute-bonnet", "flutter-mane", "slither-wing", "sandy-shocks",
-  "iron-treads", "iron-bundle", "iron-hands", "iron-jugulis", "iron-moth",
-  "iron-thorns", "wo-chien", "chien-pao", "ting-lu", "chi-yu",
-  "roaring-moon", "iron-valiant", "walking-wake", "iron-leaves",
-  "gouging-fire", "raging-bolt", "iron-boulder", "iron-crown"
-];
+const VALID_HYPHENATED_NAMES = new Set([
+  "nidoran-f",
+  "nidoran-m",
+  "mr-mime",
+  "ho-oh",
+  "mime-jr",
+  "porygon-z",
+  "type-null",
+  "jangmo-o",
+  "hakamo-o",
+  "kommo-o",
+  "tapu-koko",
+  "tapu-lele",
+  "tapu-bulu",
+  "tapu-fini",
+  "mr-rime",
+  "great-tusk",
+  "scream-tail",
+  "brute-bonnet",
+  "flutter-mane",
+  "slither-wing",
+  "sandy-shocks",
+  "iron-treads",
+  "iron-bundle",
+  "iron-hands",
+  "iron-jugulis",
+  "iron-moth",
+  "iron-thorns",
+  "wo-chien",
+  "chien-pao",
+  "ting-lu",
+  "chi-yu",
+  "roaring-moon",
+  "iron-valiant",
+  "walking-wake",
+  "iron-leaves",
+  "gouging-fire",
+  "raging-bolt",
+  "iron-boulder",
+  "iron-crown",
+]);
 
 const SearchBar: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [allPokemon, setAllPokemon] = useState<string[]>([]);
-  const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const suggestions = useMemo(() => {
+    const term = searchTerm.toLowerCase().trim();
+    if (!term) return [];
+    return allPokemon
+      .filter((pokemon) => pokemon.toLowerCase().includes(term))
+      .slice(0, 5);
+  }, [searchTerm, allPokemon]);
   const navigate = useNavigate();
   const searchRef = useRef<HTMLDivElement>(null);
 
@@ -27,7 +65,10 @@ const SearchBar: React.FC = () => {
         const data = await getPokemonSpeciesNames(1500, 0);
         const speciesNames = data.results
           .map((p: { name: string }) => p.name)
-          .filter((name: string) => !name.includes("-") || VALID_HYPHENATED_NAMES.includes(name));
+          .filter(
+            (name: string) =>
+              !name.includes("-") || VALID_HYPHENATED_NAMES.has(name),
+          );
         setAllPokemon(speciesNames);
       } catch (error) {
         console.error("Error fetching all pokemon:", error);
@@ -65,22 +106,11 @@ const SearchBar: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
-
-    if (value.length > 0) {
-      const filtered = allPokemon
-        .filter((pokemon) => pokemon.toLowerCase().includes(value.toLowerCase()))
-        .slice(0, 5);
-      setSuggestions(filtered);
-      setShowSuggestions(true);
-    } else {
-      setSuggestions([]);
-      setShowSuggestions(false);
-    }
+    setShowSuggestions(value.length > 0);
   };
 
   const handleSuggestionClick = (name: string) => {
     setSearchTerm(name);
-    setSuggestions([]);
     setShowSuggestions(false);
     navigate(`/pokemon/${name}`);
   };
