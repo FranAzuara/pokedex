@@ -8,7 +8,7 @@ const blogData = blogDataJson as BlogData;
 const News: React.FC = () => {
   return (
     <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-5">
-      <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
+      <div className="layout-content-container flex flex-col max-w-240 flex-1">
         <h2 className="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
           Latest from the Blog
         </h2>

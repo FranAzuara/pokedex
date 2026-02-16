@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import PokemonDescription from "../components/PokemonDescription";
 import PokemonDetails from "../components/PokemonDetails";
@@ -94,7 +94,8 @@ const PokemonInfo: React.FC = () => {
   }));
 
   const fromPage = location.state?.fromPage;
-  const backUrl = fromPage && fromPage > 1 ? `/pokedex?page=${fromPage}` : "/pokedex";
+  const backUrl =
+    fromPage && fromPage > 1 ? `/pokedex?page=${fromPage}` : "/pokedex";
 
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-gray-50 dark:bg-[#111418]">
@@ -107,14 +108,14 @@ const PokemonInfo: React.FC = () => {
                   onClick={() => navigate(backUrl)}
                   className="flex items-center gap-1 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary transition-colors cursor-pointer"
                 >
-                  <span className="material-symbols-outlined text-lg">arrow_back</span>
+                  <span className="material-symbols-outlined text-lg">
+                    arrow_back
+                  </span>
                   Back
                 </button>
                 <div className="h-4 w-px bg-gray-300 dark:bg-gray-700"></div>
                 <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                  <Link to={backUrl} className="hover:text-primary">
-                    Pokédex
-                  </Link>
+                  <p>Pokédex</p>
                   <span>/</span>
                   <span className="text-gray-900 dark:text-white font-medium capitalize">
                     {pokemon.name}

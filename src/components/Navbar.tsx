@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
               </svg>
             </div>
             <h2 className="text-lg font-bold leading-tight tracking-[-0.015em]">
-              Pokédex
+              PokéBlog
             </h2>
           </Link>
           <nav className="hidden sm:flex flex-1 justify-end gap-8">
