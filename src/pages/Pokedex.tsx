@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "../components/Navbar";
 import SearchBar from "../components/SearchBar";
 import PokedexGallery from "../components/PokedexGallery";
 import Footer from "../components/Footer";
@@ -9,7 +8,6 @@ const Pokedex: React.FC = () => {
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-clip">
       <div className="layout-container flex h-full grow flex-col">
-        <Navbar />
         <main className="grow">
           <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-5">
             <div className="layout-content-container flex flex-col max-w-240 flex-1">

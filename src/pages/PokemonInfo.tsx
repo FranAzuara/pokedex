@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import PokemonDescription from "../components/PokemonDescription";
 import PokemonDetails from "../components/PokemonDetails";
@@ -93,7 +92,6 @@ const PokemonInfo: React.FC = () => {
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-gray-50 dark:bg-[#111418]">
       <div className="layout-container flex h-full grow flex-col">
-        <Navbar />
         <main className="grow pb-12">
           <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-2">
             <div className="layout-content-container flex flex-col max-w-240 flex-1">
