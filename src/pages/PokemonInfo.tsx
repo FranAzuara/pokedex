@@ -28,8 +28,10 @@ const PokemonInfo: React.FC = () => {
       if (!id) return;
       try {
         setLoading(true);
-        const pokemonData = await getPokemon(id);
-        const speciesData = await getPokemonSpecies(id);
+        const [pokemonData, speciesData] = await Promise.all([
+          getPokemon(id),
+          getPokemonSpecies(id),
+        ]);
         const evolutionChainData = await getEvolutionChainByUrl(
           speciesData.evolution_chain.url,
         );

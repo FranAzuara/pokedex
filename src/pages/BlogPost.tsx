@@ -5,10 +5,11 @@ import type { BlogData } from "../types/blog";
 import Footer from "../components/Footer";
 
 const blogData = blogDataJson as BlogData;
+const articleMap = new Map(blogData.articles.map((a) => [a.slug, a]));
 
 const BlogPost: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const article = blogData.articles.find((a) => a.slug === slug);
+  const article = slug ? articleMap.get(slug) : undefined;
 
   if (!article) {
     return (

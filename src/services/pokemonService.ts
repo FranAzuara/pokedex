@@ -101,12 +101,12 @@ export async function getEvolutionChainByUrl(
  * @param chain The evolution chain link.
  */
 export function flattenEvolutionChain(chain: ChainLink): string[] {
-  let names: string[] = [chain.species.name];
+  const names: string[] = [chain.species.name];
 
   if (chain.evolves_to && chain.evolves_to.length > 0) {
-    chain.evolves_to.forEach((nextLink) => {
-      names = [...names, ...flattenEvolutionChain(nextLink)];
-    });
+    for (const nextLink of chain.evolves_to) {
+      names.push(...flattenEvolutionChain(nextLink));
+    }
   }
 
   return names;
