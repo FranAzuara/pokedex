@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import PokemonDescription from "../components/PokemonDescription";
 import PokemonDetails from "../components/PokemonDetails";
@@ -15,6 +15,8 @@ import type { PokemonDetail, PokemonSpecies } from "../types/pokemon";
 
 const PokemonInfo: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [pokemon, setPokemon] = useState<PokemonDetail | null>(null);
   const [species, setSpecies] = useState<PokemonSpecies | null>(null);
   const [evolutions, setEvolutions] = useState<
@@ -91,20 +93,33 @@ const PokemonInfo: React.FC = () => {
     value: s.base_stat,
   }));
 
+  const fromPage = location.state?.fromPage;
+  const backUrl = fromPage && fromPage > 1 ? `/pokedex?page=${fromPage}` : "/pokedex";
+
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-gray-50 dark:bg-[#111418]">
       <div className="layout-container flex h-full grow flex-col">
         <main className="grow pb-12">
           <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-2">
             <div className="layout-content-container flex flex-col max-w-240 flex-1">
-              <div className="flex items-center gap-2 px-4 py-2 text-sm text-gray-500 dark:text-gray-400">
-                <Link to="/pokedex" className="hover:text-primary">
-                  Pokédex
-                </Link>
-                <span>/</span>
-                <span className="text-gray-900 dark:text-white font-medium capitalize">
-                  {pokemon.name}
-                </span>
+              <div className="flex items-center gap-4 px-4 py-2">
+                <button
+                  onClick={() => navigate(backUrl)}
+                  className="flex items-center gap-1 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-primary transition-colors cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-lg">arrow_back</span>
+                  Back
+                </button>
+                <div className="h-4 w-px bg-gray-300 dark:bg-gray-700"></div>
+                <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                  <Link to={backUrl} className="hover:text-primary">
+                    Pokédex
+                  </Link>
+                  <span>/</span>
+                  <span className="text-gray-900 dark:text-white font-medium capitalize">
+                    {pokemon.name}
+                  </span>
+                </div>
               </div>
             </div>
           </div>

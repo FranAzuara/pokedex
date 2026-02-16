@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import PokedexCard from "./PokedexCard";
 import Pagination from "./Pagination";
 import { getPokemonList, getPokemon } from "../services/pokemonService";
@@ -7,13 +8,23 @@ import type { PokemonDetail } from "../types/pokemon";
 const ITEMS_PER_PAGE = 100;
 
 const PokedexGallery: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [pokemonList, setPokemonList] = useState<PokemonDetail[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const initialPage = parseInt(searchParams.get("page") || "1", 10);
+  const [currentPage, setCurrentPage] = useState<number>(initialPage);
   const [totalCount, setTotalCount] = useState<number>(0);
 
   const galleryRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const pageFromUrl = parseInt(searchParams.get("page") || "1", 10);
+    if (pageFromUrl !== currentPage) {
+      setCurrentPage(pageFromUrl);
+    }
+  }, [searchParams, currentPage]);
 
   useEffect(() => {
     const fetchPokemon = async () => {
@@ -47,7 +58,7 @@ const PokedexGallery: React.FC = () => {
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+    setSearchParams({ page: page.toString() });
   };
 
   if (loading && pokemonList.length === 0) {
@@ -85,6 +96,7 @@ const PokedexGallery: React.FC = () => {
                         ?.front_default || pokemon.sprites.front_default
                     }
                     types={pokemon.types.map((t) => t.type.name)}
+                    currentPage={currentPage}
                   />
                 ))}
               </div>
