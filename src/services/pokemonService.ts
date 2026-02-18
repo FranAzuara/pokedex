@@ -5,6 +5,7 @@ import type {
   ChainLink,
   FlavorText,
   PokemonList,
+  TypeResponse,
 } from "../types/pokemon";
 
 const BASE_URL = import.meta.env.VITE_POKEAPI_BASE_URL || "https://pokeapi.co/api/v2";
@@ -53,6 +54,14 @@ export async function getPokemonSpeciesNames(
   return fetchData<PokemonList>(
     `${BASE_URL}/pokemon-species?limit=${limit}&offset=${offset}`,
   );
+}
+
+/**
+ * Fetches Pokemon associated with a specific type.
+ * @param type The name or ID of the type.
+ */
+export async function getPokemonByType(type: string): Promise<TypeResponse> {
+  return fetchData<TypeResponse>(`${BASE_URL}/type/${type}`);
 }
 
 /**

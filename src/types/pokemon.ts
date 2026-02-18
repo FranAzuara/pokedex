@@ -90,3 +90,12 @@ export interface NamedAPIResource {
   name: string;
   url: string;
 }
+
+export interface TypeResponse {
+  id: number;
+  name: string;
+  pokemon: {
+    pokemon: NamedAPIResource;
+    slot: number;
+  }[];
+}

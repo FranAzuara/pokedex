@@ -2,7 +2,11 @@ import React, { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import PokedexCard from "./PokedexCard";
 import Pagination from "./Pagination";
-import { getPokemonList, getPokemon } from "../services/pokemonService";
+import {
+  getPokemonList,
+  getPokemon,
+  getPokemonByType,
+} from "../services/pokemonService";
 import type { PokemonDetail } from "../types/pokemon";
 
 const ITEMS_PER_PAGE = 100;
@@ -30,14 +34,67 @@ const PokedexGallery: React.FC = () => {
     const fetchPokemon = async () => {
       try {
         setLoading(true);
-        const offset = (currentPage - 1) * ITEMS_PER_PAGE;
-        const listData = await getPokemonList(ITEMS_PER_PAGE, offset);
+        const selectedTypes =
+          searchParams.get("types")?.split(",").filter(Boolean) || [];
 
-        setTotalCount(listData.count);
+        let detailedPokemon: PokemonDetail[] = [];
+        let count = 0;
 
-        const detailedPokemon = await Promise.all(
-          listData.results.map((p) => getPokemon(p.name)),
-        );
+        if (selectedTypes.length > 0) {
+          // Fetch by type
+          const typeResponses = await Promise.all(
+            selectedTypes.map((type) => getPokemonByType(type)),
+          );
+
+          // Union results
+          const uniquePokemonMap = new Map<
+            string,
+            { name: string; url: string }
+          >();
+          typeResponses.forEach((res) => {
+            res.pokemon.forEach((p) => {
+              uniquePokemonMap.set(p.pokemon.name, p.pokemon);
+            });
+          });
+
+          const allFilteredPokemon = Array.from(uniquePokemonMap.values());
+
+          // Sort by ID
+          const sortedPokemon = allFilteredPokemon.sort((a, b) => {
+            const idA = parseInt(
+              a.url.split("/").filter(Boolean).pop() || "0",
+              10,
+            );
+            const idB = parseInt(
+              b.url.split("/").filter(Boolean).pop() || "0",
+              10,
+            );
+            return idA - idB;
+          });
+
+          count = sortedPokemon.length;
+
+          // Paginate
+          const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+          const paginatedPokemon = sortedPokemon.slice(
+            offset,
+            offset + ITEMS_PER_PAGE,
+          );
+
+          detailedPokemon = await Promise.all(
+            paginatedPokemon.map((p) => getPokemon(p.name)),
+          );
+        } else {
+          // Original paginated fetch
+          const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+          const listData = await getPokemonList(ITEMS_PER_PAGE, offset);
+          count = listData.count;
+          detailedPokemon = await Promise.all(
+            listData.results.map((p) => getPokemon(p.name)),
+          );
+        }
+
+        setTotalCount(count);
         setPokemonList(detailedPokemon);
 
         // Scroll to top of gallery when page changes
@@ -53,7 +110,7 @@ const PokedexGallery: React.FC = () => {
     };
 
     fetchPokemon();
-  }, [currentPage]);
+  }, [currentPage, searchParams]);
 
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
