@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 
 const Home = lazy(() => import("./pages/Home"));
 const Pokedex = lazy(() => import("./pages/Pokedex"));
+const Comparator = lazy(() => import("./pages/Comparator"));
 const PokemonInfo = lazy(() => import("./pages/PokemonInfo"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPost = lazy(() => import("./pages/BlogPost"));
@@ -22,6 +23,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/pokedex" element={<Pokedex />} />
+          <Route path="/comparator" element={<Comparator />} />
           <Route path="/pokemon/:id" element={<PokemonInfo />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />

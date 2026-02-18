@@ -47,6 +47,12 @@ const Navbar: React.FC = () => {
               </Link>
               <Link
                 className="text-sm font-medium leading-normal text-gray-800 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors"
+                to="/comparator"
+              >
+                Comparator
+              </Link>
+              <Link
+                className="text-sm font-medium leading-normal text-gray-800 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors"
                 to="/blog"
               >
                 Blog

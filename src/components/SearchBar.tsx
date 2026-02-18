@@ -3,7 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { getPokemonSpeciesNames } from "../services/pokemonService";
 import { VALID_HYPHENATED_NAMES } from "../constants/pokemon";
 
-const SearchBar: React.FC = () => {
+interface SearchBarProps {
+  onSelect?: (name: string) => void;
+  placeholder?: string;
+  hideHeader?: boolean;
+  className?: string;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({
+  onSelect,
+  placeholder = "Search for a Pokémon... (e.g., Pikachu)",
+  hideHeader = false,
+  className = "",
+}) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [allPokemon, setAllPokemon] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -50,8 +62,14 @@ const SearchBar: React.FC = () => {
   }, []);
 
   const handleSearch = () => {
-    if (searchTerm.trim()) {
-      navigate(`/pokemon/${searchTerm.toLowerCase().trim()}`);
+    const term = searchTerm.toLowerCase().trim();
+    if (term) {
+      if (onSelect) {
+        onSelect(term);
+        setSearchTerm("");
+      } else {
+        navigate(`/pokemon/${term}`);
+      }
       setShowSuggestions(false);
     }
   };
@@ -69,17 +87,30 @@ const SearchBar: React.FC = () => {
   };
 
   const handleSuggestionClick = (name: string) => {
-    setSearchTerm(name);
+    if (onSelect) {
+      onSelect(name);
+      setSearchTerm("");
+    } else {
+      setSearchTerm(name);
+      navigate(`/pokemon/${name}`);
+    }
     setShowSuggestions(false);
-    navigate(`/pokemon/${name}`);
   };
 
   return (
-    <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-5" ref={searchRef}>
+    <div
+      className={
+        className ||
+        "flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-5"
+      }
+      ref={searchRef}
+    >
       <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
-        <h2 className="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
-          Find Your Favorite Pokémon
-        </h2>
+        {!hideHeader && (
+          <h2 className="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
+            Find Your Favorite Pokémon
+          </h2>
+        )}
         <div className="px-4 py-3 relative">
           <div className="flex flex-col min-w-40 h-12 w-full">
             <div className="flex w-full flex-1 items-stretch rounded-lg h-full overflow-hidden shadow-sm">
@@ -94,7 +125,7 @@ const SearchBar: React.FC = () => {
               </button>
               <input
                 className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border-none bg-gray-100 dark:bg-gray-800 h-full placeholder:text-gray-500 dark:placeholder:text-gray-400 px-4 pl-2 text-base font-normal leading-normal"
-                placeholder="Search for a Pokémon... (e.g., Pikachu)"
+                placeholder={placeholder}
                 type="text"
                 value={searchTerm}
                 onChange={handleInputChange}
