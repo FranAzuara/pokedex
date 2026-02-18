@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 interface PaginationProps {
   currentPage: number;
@@ -11,7 +11,7 @@ const Pagination: React.FC<PaginationProps> = ({
   totalPages,
   onPageChange,
 }) => {
-  const getPageNumbers = () => {
+  const pageNumbers = useMemo(() => {
     const pages: (number | string)[] = [];
 
     if (totalPages <= 7) {
@@ -44,7 +44,7 @@ const Pagination: React.FC<PaginationProps> = ({
     }
 
     return pages;
-  };
+  }, [currentPage, totalPages]);
 
   return (
     <nav
@@ -65,7 +65,7 @@ const Pagination: React.FC<PaginationProps> = ({
         </button>
 
         {/* Page Number Buttons with Truncation */}
-        {getPageNumbers().map((page, index) => (
+        {pageNumbers.map((page, index) => (
           <React.Fragment key={index}>
             {typeof page === "number" ? (
               <button

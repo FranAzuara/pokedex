@@ -56,6 +56,27 @@ export async function getPokemonSpeciesNames(
   );
 }
 
+let allSpeciesNamesPromise: Promise<string[]> | null = null;
+
+/**
+ * Fetches and filters all Pokemon species names, caching the promise to avoid redundant requests.
+ * @param validHyphenatedNames A set of hyphenated names that should not be filtered out.
+ */
+export async function getAllSpeciesNames(
+  validHyphenatedNames: Set<string>,
+): Promise<string[]> {
+  if (!allSpeciesNamesPromise) {
+    allSpeciesNamesPromise = getPokemonSpeciesNames(1500, 0).then((data) =>
+      data.results
+        .map((p) => p.name)
+        .filter(
+          (name) => !name.includes("-") || validHyphenatedNames.has(name),
+        ),
+    );
+  }
+  return allSpeciesNamesPromise;
+}
+
 /**
  * Fetches Pokemon associated with a specific type.
  * @param type The name or ID of the type.
