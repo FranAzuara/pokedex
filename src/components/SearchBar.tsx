@@ -1,48 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { getPokemonSpeciesNames } from "../services/pokemonService";
-
-const VALID_HYPHENATED_NAMES = new Set([
-  "nidoran-f",
-  "nidoran-m",
-  "mr-mime",
-  "ho-oh",
-  "mime-jr",
-  "porygon-z",
-  "type-null",
-  "jangmo-o",
-  "hakamo-o",
-  "kommo-o",
-  "tapu-koko",
-  "tapu-lele",
-  "tapu-bulu",
-  "tapu-fini",
-  "mr-rime",
-  "great-tusk",
-  "scream-tail",
-  "brute-bonnet",
-  "flutter-mane",
-  "slither-wing",
-  "sandy-shocks",
-  "iron-treads",
-  "iron-bundle",
-  "iron-hands",
-  "iron-jugulis",
-  "iron-moth",
-  "iron-thorns",
-  "wo-chien",
-  "chien-pao",
-  "ting-lu",
-  "chi-yu",
-  "roaring-moon",
-  "iron-valiant",
-  "walking-wake",
-  "iron-leaves",
-  "gouging-fire",
-  "raging-bolt",
-  "iron-boulder",
-  "iron-crown",
-]);
+import { VALID_HYPHENATED_NAMES } from "../constants/pokemon";
 
 const SearchBar: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState("");
