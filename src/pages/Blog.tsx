@@ -9,15 +9,16 @@ const blogData = blogDataJson as BlogData;
 const Blog: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen bg-background-light dark:bg-background-dark">
-      <main className="flex-grow py-10">
+      <main className="grow py-10">
         <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40">
-          <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
+          <div className="layout-content-container flex flex-col max-w-240 flex-1">
             <div className="px-4 py-10">
               <h1 className="text-gray-900 dark:text-white text-4xl md:text-5xl font-extrabold leading-tight tracking-tight mb-4">
                 Our Blog
               </h1>
               <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl">
-                Explore in-depth guides, competitive strategies, and the rich lore of the Pokémon universe.
+                Explore in-depth guides, competitive strategies, and the rich
+                lore of the Pokémon universe.
               </p>
             </div>
 
@@ -38,7 +39,9 @@ const Blog: React.FC = () => {
                   </div>
                   <div className="flex flex-col gap-3 p-6 pt-2">
                     <div className="flex items-center gap-2">
-                      <span className={`rounded-full px-3 py-1 text-xs font-semibold ${article.color}`}>
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-semibold ${article.color}`}
+                      >
                         {article.category}
                       </span>
                     </div>
@@ -50,7 +53,9 @@ const Blog: React.FC = () => {
                     </p>
                     <div className="flex items-center text-primary font-bold mt-2 gap-1">
                       Read more
-                      <span className="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">arrow_forward</span>
+                      <span className="material-symbols-outlined text-sm transition-transform group-hover:translate-x-1">
+                        arrow_forward
+                      </span>
                     </div>
                   </div>
                 </Link>

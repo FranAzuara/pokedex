@@ -44,7 +44,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target as Node)
+      ) {
         setShowSuggestions(false);
       }
     };
@@ -99,7 +102,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       }
       ref={searchRef}
     >
-      <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
+      <div className="layout-content-container flex flex-col max-w-240 flex-1">
         {!hideHeader && (
           <h2 className="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-5">
             Find Your Favorite Pokémon
