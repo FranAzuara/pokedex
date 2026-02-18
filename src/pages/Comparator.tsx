@@ -14,6 +14,9 @@ import {
   Tooltip,
 } from "recharts";
 
+const STAT_NAMES = ["HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"];
+const CHART_COLORS = ["#ef4444", "#3b82f6", "#10b981"]; // Red, Blue, Green
+
 const Comparator: React.FC = () => {
   const [selectedPokemon, setSelectedPokemon] = useState<(PokemonDetail | null)[]>([null, null, null]);
   const [loading, setLoading] = useState<boolean[]>([false, false, false]);
@@ -45,15 +48,13 @@ const Comparator: React.FC = () => {
     }
   };
 
-  const statNames = ["HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"];
-
   interface ChartDataItem {
     subject: string;
     fullMark: number;
     [key: string]: string | number;
   }
 
-  const chartData: ChartDataItem[] = statNames.map((name, i) => {
+  const chartData: ChartDataItem[] = STAT_NAMES.map((name, i) => {
     const dataItem: ChartDataItem = { subject: name, fullMark: 255 };
     selectedPokemon.forEach((pokemon, index) => {
       if (pokemon) {
@@ -62,8 +63,6 @@ const Comparator: React.FC = () => {
     });
     return dataItem;
   });
-
-  const colors = ["#ef4444", "#3b82f6", "#10b981"]; // Red, Blue, Green
 
   const activePokemonCount = selectedPokemon.filter(Boolean).length;
 
@@ -139,7 +138,7 @@ const Comparator: React.FC = () => {
                           <div className="mt-4 w-full grid grid-cols-2 gap-2 text-xs">
                              {selectedPokemon[i]?.stats.map((s, si) => (
                                <div key={si} className="flex justify-between px-2 py-1 bg-gray-50 dark:bg-gray-700/50 rounded">
-                                 <span className="text-gray-500 dark:text-gray-400 font-medium uppercase">{statNames[si]}</span>
+                                 <span className="text-gray-500 dark:text-gray-400 font-medium uppercase">{STAT_NAMES[si]}</span>
                                  <span className="text-gray-900 dark:text-white font-bold">{s.base_stat}</span>
                                </div>
                              ))}
@@ -198,8 +197,8 @@ const Comparator: React.FC = () => {
                                 key={pokemon.id}
                                 name={pokemon.name.toUpperCase()}
                                 dataKey={`p${index}`}
-                                stroke={colors[index]}
-                                fill={colors[index]}
+                                stroke={CHART_COLORS[index]}
+                                fill={CHART_COLORS[index]}
                                 fillOpacity={0.4}
                                 strokeWidth={3}
                               />

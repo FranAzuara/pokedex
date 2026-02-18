@@ -17,18 +17,10 @@ const PokedexGallery: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const initialPage = parseInt(searchParams.get("page") || "1", 10);
-  const [currentPage, setCurrentPage] = useState<number>(initialPage);
+  const currentPage = parseInt(searchParams.get("page") || "1", 10);
   const [totalCount, setTotalCount] = useState<number>(0);
 
   const galleryRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const pageFromUrl = parseInt(searchParams.get("page") || "1", 10);
-    if (pageFromUrl !== currentPage) {
-      setCurrentPage(pageFromUrl);
-    }
-  }, [searchParams, currentPage]);
 
   useEffect(() => {
     let active = true;
@@ -63,7 +55,7 @@ const PokedexGallery: React.FC = () => {
           const allFilteredPokemon = Array.from(uniquePokemonMap.values());
 
           // Sort by ID
-          const sortedPokemon = allFilteredPokemon.sort((a, b) => {
+          const sortedPokemon = allFilteredPokemon.toSorted((a, b) => {
             const idA = parseInt(
               a.url.split("/").filter(Boolean).pop() || "0",
               10,
@@ -176,17 +168,17 @@ const PokedexGallery: React.FC = () => {
       </div>
 
       {totalPages > 1 &&
-        !(searchParams.get("types")?.split(",").filter(Boolean).length) && (
-          <div className="sticky bottom-0 w-full py-4 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 z-20 flex justify-center shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05),0_-2px_4px_-1px_rgba(0,0,0,0.03)]">
-            <div className="max-w-240 w-full px-4 flex justify-center">
-              <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
-              />
-            </div>
+      !searchParams.get("types")?.split(",").filter(Boolean).length ? (
+        <div className="sticky bottom-0 w-full py-4 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 z-20 flex justify-center shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05),0_-2px_4px_-1px_rgba(0,0,0,0.03)]">
+          <div className="max-w-240 w-full px-4 flex justify-center">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
           </div>
-        )}
+        </div>
+      ) : null}
     </div>
   );
 };

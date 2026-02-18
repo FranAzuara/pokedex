@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { getPokemonSpeciesNames } from "../services/pokemonService";
+import { getAllSpeciesNames } from "../services/pokemonService";
 import { VALID_HYPHENATED_NAMES } from "../constants/pokemon";
 
 interface SearchBarProps {
@@ -33,13 +33,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   useEffect(() => {
     const fetchAllPokemon = async () => {
       try {
-        const data = await getPokemonSpeciesNames(1500, 0);
-        const speciesNames = data.results
-          .map((p: { name: string }) => p.name)
-          .filter(
-            (name: string) =>
-              !name.includes("-") || VALID_HYPHENATED_NAMES.has(name),
-          );
+        const speciesNames = await getAllSpeciesNames(VALID_HYPHENATED_NAMES);
         setAllPokemon(speciesNames);
       } catch (error) {
         console.error("Error fetching all pokemon:", error);
