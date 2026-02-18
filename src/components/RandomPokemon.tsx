@@ -38,10 +38,10 @@ const RandomPokemon: React.FC = () => {
       <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
         <div className="mx-4 flex flex-col items-center gap-4 py-8 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
           <h2 className="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] text-center">
-            Pokémon Aleatorio
+            Random Pokémon
           </h2>
           <p className="text-gray-600 dark:text-gray-400 text-sm text-center px-4 font-medium">
-            ¿No sabes qué Pokémon buscar? ¡Prueba tu suerte y descubre uno al azar!
+            Don't know which Pokémon to search for? Try your luck and discover one at random!
           </p>
           <button
             onClick={handleRandom}
@@ -51,7 +51,7 @@ const RandomPokemon: React.FC = () => {
             <span className="material-symbols-outlined" aria-hidden="true">
               casino
             </span>
-            ¡Suerte!
+            I'm Feeling Lucky
           </button>
         </div>
       </div>
