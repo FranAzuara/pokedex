@@ -84,12 +84,14 @@ const Comparator: React.FC = () => {
                       <h3 className="text-gray-900 dark:text-white text-lg font-bold mb-3 px-2">
                         Slot {i + 1}
                       </h3>
-                      <SearchBar
-                        onSelect={(name) => handleSelect(i, name)}
-                        placeholder="Search Pokémon..."
-                        hideHeader={true}
-                        className="w-full !px-0 !py-0"
-                      />
+                      <div className="border-2 border-gray-100 dark:border-gray-700 rounded-xl focus-within:border-primary/50 transition-all bg-gray-50/30 dark:bg-gray-900/10 hover:border-gray-200 dark:hover:border-gray-600">
+                        <SearchBar
+                          onSelect={(name) => handleSelect(i, name)}
+                          placeholder="Search Pokémon..."
+                          hideHeader={true}
+                          className="w-full !px-0 !py-0"
+                        />
+                      </div>
 
                       {loading[i] ? (
                         <div className="mt-8 flex flex-1 items-center justify-center">
