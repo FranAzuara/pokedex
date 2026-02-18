@@ -2,7 +2,11 @@ import React, { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import PokedexCard from "./PokedexCard";
 import Pagination from "./Pagination";
-import { getPokemonList, getPokemon } from "../services/pokemonService";
+import {
+  getPokemonList,
+  getPokemon,
+  getPokemonByType,
+} from "../services/pokemonService";
 import type { PokemonDetail } from "../types/pokemon";
 
 const ITEMS_PER_PAGE = 100;
@@ -27,17 +31,78 @@ const PokedexGallery: React.FC = () => {
   }, [searchParams, currentPage]);
 
   useEffect(() => {
+    let active = true;
     const fetchPokemon = async () => {
       try {
         setLoading(true);
-        const offset = (currentPage - 1) * ITEMS_PER_PAGE;
-        const listData = await getPokemonList(ITEMS_PER_PAGE, offset);
+        const selectedTypes =
+          searchParams.get("types")?.split(",").filter(Boolean) || [];
 
-        setTotalCount(listData.count);
+        let detailedPokemon: PokemonDetail[] = [];
+        let count = 0;
 
-        const detailedPokemon = await Promise.all(
-          listData.results.map((p) => getPokemon(p.name)),
-        );
+        if (selectedTypes.length > 0) {
+          // Fetch by type
+          const typeResponses = await Promise.all(
+            selectedTypes.map((type) => getPokemonByType(type)),
+          );
+
+          if (!active) return;
+
+          // Union results
+          const uniquePokemonMap = new Map<
+            string,
+            { name: string; url: string }
+          >();
+          typeResponses.forEach((res) => {
+            res.pokemon.forEach((p) => {
+              uniquePokemonMap.set(p.pokemon.name, p.pokemon);
+            });
+          });
+
+          const allFilteredPokemon = Array.from(uniquePokemonMap.values());
+
+          // Sort by ID
+          const sortedPokemon = allFilteredPokemon.sort((a, b) => {
+            const idA = parseInt(
+              a.url.split("/").filter(Boolean).pop() || "0",
+              10,
+            );
+            const idB = parseInt(
+              b.url.split("/").filter(Boolean).pop() || "0",
+              10,
+            );
+            return idA - idB;
+          });
+
+          count = sortedPokemon.length;
+
+          // Fetch all in batches to avoid overwhelming the network
+          const batchSize = 50;
+          for (let i = 0; i < sortedPokemon.length; i += batchSize) {
+            const batch = sortedPokemon.slice(i, i + batchSize);
+            const batchResults = await Promise.all(
+              batch.map((p) => getPokemon(p.name)),
+            );
+            if (!active) break;
+            detailedPokemon.push(...batchResults);
+          }
+        } else {
+          // Original paginated fetch
+          const offset = (currentPage - 1) * ITEMS_PER_PAGE;
+          const listData = await getPokemonList(ITEMS_PER_PAGE, offset);
+          count = listData.count;
+
+          if (!active) return;
+
+          detailedPokemon = await Promise.all(
+            listData.results.map((p) => getPokemon(p.name)),
+          );
+        }
+
+        if (!active) return;
+
+        setTotalCount(count);
         setPokemonList(detailedPokemon);
 
         // Scroll to top of gallery when page changes
@@ -45,15 +110,20 @@ const PokedexGallery: React.FC = () => {
           galleryRef.current.scrollIntoView({ behavior: "smooth" });
         }
       } catch (err) {
-        setError("Failed to load Pokémon. Please try again later.");
-        console.error(err);
+        if (active) {
+          setError("Failed to load Pokémon. Please try again later.");
+          console.error(err);
+        }
       } finally {
-        setLoading(false);
+        if (active) setLoading(false);
       }
     };
 
     fetchPokemon();
-  }, [currentPage]);
+    return () => {
+      active = false;
+    };
+  }, [currentPage, searchParams]);
 
   const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
 
@@ -105,17 +175,18 @@ const PokedexGallery: React.FC = () => {
         </div>
       </div>
 
-      {totalPages > 1 && (
-        <div className="sticky bottom-0 w-full py-4 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 z-20 flex justify-center shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05),0_-2px_4px_-1px_rgba(0,0,0,0.03)]">
-          <div className="max-w-240 w-full px-4 flex justify-center">
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={handlePageChange}
-            />
+      {totalPages > 1 &&
+        !(searchParams.get("types")?.split(",").filter(Boolean).length) && (
+          <div className="sticky bottom-0 w-full py-4 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 z-20 flex justify-center shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05),0_-2px_4px_-1px_rgba(0,0,0,0.03)]">
+            <div className="max-w-240 w-full px-4 flex justify-center">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
     </div>
   );
 };

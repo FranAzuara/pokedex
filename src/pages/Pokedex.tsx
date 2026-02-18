@@ -1,5 +1,6 @@
 import React from "react";
 import SearchBar from "../components/SearchBar";
+import TypeFilter from "../components/TypeFilter";
 import PokedexGallery from "../components/PokedexGallery";
 import Footer from "../components/Footer";
 import { Link } from "react-router-dom";
@@ -35,6 +36,7 @@ const Pokedex: React.FC = () => {
           </div>
 
           <SearchBar />
+          <TypeFilter />
           <PokedexGallery />
         </main>
         <Footer />
