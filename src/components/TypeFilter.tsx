@@ -33,6 +33,7 @@ const TypeFilter: React.FC = () => {
     if (selectedTypes.includes(type)) {
       newTypes = selectedTypes.filter((t) => t !== type);
     } else {
+      if (selectedTypes.length >= 3) return;
       newTypes = [...selectedTypes, type];
     }
 
@@ -49,9 +50,14 @@ const TypeFilter: React.FC = () => {
   return (
     <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-5">
       <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
-        <h2 className="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] px-4 pb-3">
-          Filter by Type
-        </h2>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between px-4 pb-3">
+          <h2 className="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em]">
+            Filter by Type
+          </h2>
+          <span className="text-sm text-gray-500 dark:text-gray-400">
+            {selectedTypes.length} / 3 selected
+          </span>
+        </div>
         <div className="grid grid-cols-3 sm:grid-cols-6 md:grid-cols-9 gap-2 px-4 py-2">
           {types.map((type) => {
             const isSelected = selectedTypes.includes(type);
