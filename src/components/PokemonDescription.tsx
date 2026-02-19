@@ -1,4 +1,5 @@
 import React from "react";
+import { TYPE_COLORS } from "../constants/pokemon";
 
 interface PokemonDescriptionProps {
   id: string;
@@ -8,27 +9,6 @@ interface PokemonDescriptionProps {
   types: string[];
 }
 
-const typeColors: Record<string, string> = {
-  grass: "#9bcc50",
-  fire: "#ff4422",
-  water: "#3399ff",
-  bug: "#aabb22",
-  normal: "#aaaa99",
-  poison: "#aa5599",
-  electric: "#ffcc33",
-  ground: "#ddbb55",
-  fairy: "#ee99ee",
-  fighting: "#bb5544",
-  psychic: "#ff5599",
-  rock: "#bbaa66",
-  ghost: "#6666bb",
-  ice: "#66ccff",
-  dragon: "#7766ee",
-  dark: "#775544",
-  steel: "#aaaabb",
-  flying: "#8899ff",
-};
-
 const PokemonDescription: React.FC<PokemonDescriptionProps> = ({
   id,
   name,
@@ -37,7 +17,7 @@ const PokemonDescription: React.FC<PokemonDescriptionProps> = ({
   types,
 }) => {
   const primaryType = types[0]?.toLowerCase() || "normal";
-  const bgColor = typeColors[primaryType] || typeColors.normal;
+  const bgColor = TYPE_COLORS[primaryType] || TYPE_COLORS.normal;
 
   return (
     <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-5">
