@@ -39,3 +39,24 @@ export const VALID_HYPHENATED_NAMES = new Set([
   "iron-boulder",
   "iron-crown",
 ]);
+
+export const TYPE_COLORS: Record<string, string> = {
+  grass: "#9bcc50",
+  fire: "#ff4422",
+  water: "#3399ff",
+  bug: "#aabb22",
+  normal: "#aaaa99",
+  poison: "#aa5599",
+  electric: "#ffcc33",
+  ground: "#ddbb55",
+  fairy: "#ee99ee",
+  fighting: "#bb5544",
+  psychic: "#ff5599",
+  rock: "#bbaa66",
+  ghost: "#6666bb",
+  ice: "#66ccff",
+  dragon: "#7766ee",
+  dark: "#775544",
+  steel: "#aaaabb",
+  flying: "#8899ff",
+};

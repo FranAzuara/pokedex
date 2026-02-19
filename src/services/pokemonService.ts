@@ -86,6 +86,14 @@ export async function getPokemonByType(type: string): Promise<TypeResponse> {
 }
 
 /**
+ * Fetches damage relations for a specific type.
+ * @param type The name or ID of the type.
+ */
+export async function getDamageRelations(type: string): Promise<TypeResponse> {
+  return getPokemonByType(type);
+}
+
+/**
  * Fetches detailed information about a Pokemon.
  * @param nameOrId The name or ID of the Pokemon.
  */

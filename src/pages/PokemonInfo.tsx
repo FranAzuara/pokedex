@@ -3,6 +3,7 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import PokemonDescription from "../components/PokemonDescription";
 import PokemonDetails from "../components/PokemonDetails";
+import PokemonDamageRelations from "../components/PokemonDamageRelations";
 import PokemonEvolutionChain from "../components/PokemonEvolutionChain";
 import {
   getPokemon,
@@ -143,6 +144,8 @@ const PokemonInfo: React.FC = () => {
             hiddenAbility={hiddenAbility}
             stats={stats}
           />
+
+          <PokemonDamageRelations types={pokemon.types.map((t) => t.type.name)} />
 
           <PokemonEvolutionChain evolutions={evolutions} />
         </main>

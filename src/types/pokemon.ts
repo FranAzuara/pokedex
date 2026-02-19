@@ -94,8 +94,15 @@ export interface NamedAPIResource {
 export interface TypeResponse {
   id: number;
   name: string;
+  damage_relations: DamageRelations;
   pokemon: {
     pokemon: NamedAPIResource;
     slot: number;
   }[];
+}
+
+export interface DamageRelations {
+  no_damage_from: NamedAPIResource[];
+  half_damage_from: NamedAPIResource[];
+  double_damage_from: NamedAPIResource[];
 }

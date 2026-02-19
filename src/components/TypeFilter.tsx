@@ -1,28 +1,8 @@
 import React from "react";
 import { useSearchParams } from "react-router-dom";
+import { TYPE_COLORS } from "../constants/pokemon";
 
-const typeColors: Record<string, string> = {
-  normal: "#aaaa99",
-  fire: "#ff4422",
-  water: "#3399ff",
-  electric: "#ffcc33",
-  grass: "#9bcc50",
-  ice: "#66ccff",
-  fighting: "#bb5544",
-  poison: "#aa5599",
-  ground: "#ddbb55",
-  flying: "#8899ff",
-  psychic: "#ff5599",
-  bug: "#aabb22",
-  rock: "#bbaa66",
-  ghost: "#6666bb",
-  dragon: "#7766ee",
-  dark: "#775544",
-  steel: "#aaaabb",
-  fairy: "#ee99ee",
-};
-
-const types = Object.keys(typeColors);
+const types = Object.keys(TYPE_COLORS);
 
 const TypeFilter: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -67,7 +47,7 @@ const TypeFilter: React.FC = () => {
               <button
                 key={type}
                 onClick={() => toggleType(type)}
-                style={{ backgroundColor: typeColors[type] }}
+                style={{ backgroundColor: TYPE_COLORS[type] }}
                 className={`
                   px-2 py-2 rounded-lg text-white font-bold text-xs uppercase tracking-wider transition-all duration-200
                   ${isSelected ? "ring-2 ring-offset-2 ring-gray-400 dark:ring-gray-600 scale-105 shadow-md" : ""}
