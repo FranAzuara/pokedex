@@ -72,6 +72,33 @@
         }
       }
     },
+    "/type/{name_or_id}": {
+      "get": {
+        "tags": ["Types"],
+        "summary": "Detalles de un tipo y sus relaciones de daño.",
+        "parameters": [
+          {
+            "name": "name_or_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "oneOf": [{ "type": "string" }, { "type": "integer" }]
+            },
+            "example": "fire"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Relaciones de daño (damage_relations) recuperadas.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/TypeDetail" }
+              }
+            }
+          }
+        }
+      }
+    },
     "/pokemon-species/{name_or_id}": {
       "get": {
         "tags": ["Species"],
@@ -195,6 +222,32 @@
               "name": { "type": "string" },
               "url": { "type": "string" }
             }
+          }
+        }
+      },
+      "TypeDetail": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "damage_relations": { "$ref": "#/components/schemas/DamageRelations" }
+        }
+      },
+      "DamageRelations": {
+        "type": "object",
+        "description": "Relaciones de eficacia de daño del tipo.",
+        "properties": {
+          "no_damage_from": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/NamedAPIResource" }
+          },
+          "half_damage_from": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/NamedAPIResource" }
+          },
+          "double_damage_from": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/NamedAPIResource" }
           }
         }
       },
