@@ -135,6 +135,7 @@ const PokemonInfo: React.FC = () => {
             }
             description={description}
             types={pokemon.types.map((t) => t.type.name)}
+            generation={species.generation.name}
           />
 
           <PokemonDetails

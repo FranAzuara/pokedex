@@ -7,6 +7,7 @@ interface PokemonDescriptionProps {
   image: string;
   description: string;
   types: string[];
+  generation: string;
 }
 
 const PokemonDescription: React.FC<PokemonDescriptionProps> = ({
@@ -15,6 +16,7 @@ const PokemonDescription: React.FC<PokemonDescriptionProps> = ({
   image,
   description,
   types,
+  generation,
 }) => {
   const primaryType = types[0]?.toLowerCase() || "normal";
   const bgColor = TYPE_COLORS[primaryType] || TYPE_COLORS.normal;
@@ -33,15 +35,23 @@ const PokemonDescription: React.FC<PokemonDescriptionProps> = ({
             <p className="text-lg md:text-xl font-medium leading-normal mt-4 opacity-90 max-w-md">
               {description}
             </p>
-            <div className="flex gap-3 mt-8">
-              {types.map((type) => (
-                <span
-                  key={type}
-                  className="px-6 py-2 rounded-full bg-white/20 backdrop-blur-sm text-white font-bold text-sm uppercase tracking-wider"
-                >
-                  {type}
+            <div className="flex flex-col gap-4 mt-8">
+              <div className="flex gap-3">
+                {types.map((type) => (
+                  <span
+                    key={type}
+                    className="px-6 py-2 rounded-full bg-white/20 backdrop-blur-sm text-white font-bold text-sm uppercase tracking-wider"
+                  >
+                    {type}
+                  </span>
+                ))}
+              </div>
+              <p className="text-sm font-bold text-white/80 uppercase tracking-widest flex items-center gap-2">
+                <span className="material-symbols-outlined text-lg">
+                  history_edu
                 </span>
-              ))}
+                {generation.replace("generation-", "Generation ")}
+              </p>
             </div>
           </div>
           <div className="flex-1 relative flex items-center justify-center bg-white/10 backdrop-blur-md">
