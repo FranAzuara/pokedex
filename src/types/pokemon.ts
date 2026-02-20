@@ -102,6 +102,13 @@ export interface TypeResponse {
   }[];
 }
 
+export interface GenerationResponse {
+  id: number;
+  name: string;
+  pokemon_species: NamedAPIResource[];
+  main_region: NamedAPIResource;
+}
+
 export interface DamageRelations {
   no_damage_from: NamedAPIResource[];
   half_damage_from: NamedAPIResource[];
