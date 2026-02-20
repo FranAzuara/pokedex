@@ -41,6 +41,7 @@ export interface AbilityEntry {
 }
 
 export interface PokemonSpecies {
+  generation: NamedAPIResource;
   evolution_chain: {
     url: string;
   };

@@ -5,6 +5,7 @@ import PokemonDescription from "../components/PokemonDescription";
 import PokemonDetails from "../components/PokemonDetails";
 import PokemonDamageRelations from "../components/PokemonDamageRelations";
 import PokemonEvolutionChain from "../components/PokemonEvolutionChain";
+import { GENERATION_MAP } from "../constants/pokemon";
 import {
   getPokemon,
   getPokemonSpecies,
@@ -135,6 +136,9 @@ const PokemonInfo: React.FC = () => {
             }
             description={description}
             types={pokemon.types.map((t) => t.type.name)}
+            generation={
+              GENERATION_MAP[species.generation.name] || species.generation.name
+            }
           />
 
           <PokemonDetails
