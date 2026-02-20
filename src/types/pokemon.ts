@@ -41,6 +41,7 @@ export interface AbilityEntry {
 }
 
 export interface PokemonSpecies {
+  generation: NamedAPIResource;
   evolution_chain: {
     url: string;
   };
@@ -99,6 +100,13 @@ export interface TypeResponse {
     pokemon: NamedAPIResource;
     slot: number;
   }[];
+}
+
+export interface GenerationResponse {
+  id: number;
+  name: string;
+  pokemon_species: NamedAPIResource[];
+  main_region: NamedAPIResource;
 }
 
 export interface DamageRelations {

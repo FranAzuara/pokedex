@@ -60,3 +60,15 @@ export const TYPE_COLORS: Record<string, string> = {
   steel: "#aaaabb",
   flying: "#8899ff",
 };
+
+export const GENERATION_MAP: Record<string, string> = {
+  "generation-i": "Gen1 - Kanto",
+  "generation-ii": "Gen2 - Johto",
+  "generation-iii": "Gen3 - Hoenn",
+  "generation-iv": "Gen4 - Sinnoh",
+  "generation-v": "Gen5 - Unova",
+  "generation-vi": "Gen6 - Kalos",
+  "generation-vii": "Gen7 - Alola",
+  "generation-viii": "Gen8 - Galar",
+  "generation-ix": "Gen9 - Paldea",
+};
