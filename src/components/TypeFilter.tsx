@@ -6,7 +6,8 @@ const types = Object.keys(TYPE_COLORS);
 
 const TypeFilter: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const selectedTypes = searchParams.get("types")?.split(",").filter(Boolean) || [];
+  const selectedTypes =
+    searchParams.get("types")?.split(",").filter(Boolean) || [];
 
   const toggleType = (type: string) => {
     let newTypes: string[];
@@ -49,7 +50,7 @@ const TypeFilter: React.FC = () => {
                 onClick={() => toggleType(type)}
                 style={{ backgroundColor: TYPE_COLORS[type] }}
                 className={`
-                  px-2 py-2 rounded-lg text-white font-bold text-xs uppercase tracking-wider transition-all duration-200
+                  px-2 py-2 rounded-lg cursor-pointer text-white font-bold text-xs uppercase tracking-wider transition-all duration-200
                   ${isSelected ? "ring-2 ring-offset-2 ring-gray-400 dark:ring-gray-600 scale-105 shadow-md" : ""}
                   ${isActive ? "opacity-100" : "opacity-40 hover:opacity-60"}
                 `}
