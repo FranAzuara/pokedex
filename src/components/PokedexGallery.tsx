@@ -6,6 +6,7 @@ import {
   getPokemonList,
   getPokemon,
   getPokemonByType,
+  getPokemonByGeneration,
 } from "../services/pokemonService";
 import type { PokemonDetail } from "../types/pokemon";
 
@@ -29,43 +30,81 @@ const PokedexGallery: React.FC = () => {
         setLoading(true);
         const selectedTypes =
           searchParams.get("types")?.split(",").filter(Boolean) || [];
+        const selectedGens =
+          searchParams.get("generations")?.split(",").filter(Boolean) || [];
 
         let detailedPokemon: PokemonDetail[] = [];
         let count = 0;
 
-        if (selectedTypes.length > 0) {
-          // Fetch by type
-          const typeResponses = await Promise.all(
-            selectedTypes.map((type) => getPokemonByType(type)),
-          );
+        if (selectedTypes.length > 0 || selectedGens.length > 0) {
+          let filteredSpeciesNames: string[] = [];
+
+          const [typeResponses, genResponses] = await Promise.all([
+            Promise.all(selectedTypes.map((type) => getPokemonByType(type))),
+            Promise.all(selectedGens.map((gen) => getPokemonByGeneration(gen))),
+          ]);
 
           if (!active) return;
 
-          // Union results
-          const uniquePokemonMap = new Map<
-            string,
-            { name: string; url: string }
-          >();
-          typeResponses.forEach((res) => {
-            res.pokemon.forEach((p) => {
-              uniquePokemonMap.set(p.pokemon.name, p.pokemon);
+          const typeSpecies = new Set<string>();
+          if (selectedTypes.length > 0) {
+            typeResponses.forEach((res) => {
+              res.pokemon.forEach((p) => typeSpecies.add(p.pokemon.name));
             });
+          }
+
+          const genSpecies = new Set<string>();
+          if (selectedGens.length > 0) {
+            genResponses.forEach((res) => {
+              res.pokemon_species.forEach((p) => genSpecies.add(p.name));
+            });
+          }
+
+          if (selectedTypes.length > 0 && selectedGens.length > 0) {
+            // Intersection
+            filteredSpeciesNames = Array.from(typeSpecies).filter((name) =>
+              genSpecies.has(name),
+            );
+          } else if (selectedTypes.length > 0) {
+            filteredSpeciesNames = Array.from(typeSpecies);
+          } else {
+            filteredSpeciesNames = Array.from(genSpecies);
+          }
+
+          // Convert names to objects with url for ID sorting
+          // We don't have the URL for generation species easily, but we can reconstruct it or fetch details
+          // Actually, getPokemonByGeneration returns NamedAPIResource which HAS the url.
+          // Wait, genResponses[i].pokemon_species[j] has {name, url}.
+          // typeResponses[i].pokemon[j].pokemon has {name, url}.
+
+          const nameToUrlMap = new Map<string, string>();
+          typeResponses.forEach((res) => {
+            res.pokemon.forEach((p) =>
+              nameToUrlMap.set(p.pokemon.name, p.pokemon.url),
+            );
+          });
+          genResponses.forEach((res) => {
+            res.pokemon_species.forEach((p) =>
+              nameToUrlMap.set(p.name, p.url),
+            );
           });
 
-          const allFilteredPokemon = Array.from(uniquePokemonMap.values());
-
-          // Sort by ID
-          const sortedPokemon = allFilteredPokemon.toSorted((a, b) => {
-            const idA = parseInt(
-              a.url.split("/").filter(Boolean).pop() || "0",
-              10,
-            );
-            const idB = parseInt(
-              b.url.split("/").filter(Boolean).pop() || "0",
-              10,
-            );
-            return idA - idB;
-          });
+          const sortedPokemon = filteredSpeciesNames
+            .map((name) => ({
+              name,
+              url: nameToUrlMap.get(name) || "",
+            }))
+            .toSorted((a, b) => {
+              const idA = parseInt(
+                a.url.split("/").filter(Boolean).pop() || "0",
+                10,
+              );
+              const idB = parseInt(
+                b.url.split("/").filter(Boolean).pop() || "0",
+                10,
+              );
+              return idA - idB;
+            });
 
           count = sortedPokemon.length;
 
@@ -168,7 +207,8 @@ const PokedexGallery: React.FC = () => {
       </div>
 
       {totalPages > 1 &&
-      !searchParams.get("types")?.split(",").filter(Boolean).length ? (
+      !searchParams.get("types")?.split(",").filter(Boolean).length &&
+      !searchParams.get("generations")?.split(",").filter(Boolean).length ? (
         <div className="sticky bottom-0 w-full py-4 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-t border-gray-200 dark:border-gray-800 z-20 flex justify-center shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05),0_-2px_4px_-1px_rgba(0,0,0,0.03)]">
           <div className="max-w-240 w-full px-4 flex justify-center">
             <Pagination

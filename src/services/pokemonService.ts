@@ -6,6 +6,7 @@ import type {
   FlavorText,
   PokemonList,
   TypeResponse,
+  GenerationResponse,
 } from "../types/pokemon";
 
 const BASE_URL = import.meta.env.VITE_POKEAPI_BASE_URL || "https://pokeapi.co/api/v2";
@@ -27,6 +28,16 @@ async function fetchData<T>(url: string): Promise<T> {
     throw new Error(`Failed to fetch from ${url}: ${response.statusText}`);
   }
   return response.json();
+}
+
+/**
+ * Fetches Pokemon associated with a specific generation.
+ * @param gen The name or ID of the generation.
+ */
+export async function getPokemonByGeneration(
+  gen: string | number,
+): Promise<GenerationResponse> {
+  return fetchData<GenerationResponse>(`${BASE_URL}/generation/${gen}`);
 }
 
 /**
