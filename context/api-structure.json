@@ -102,7 +102,7 @@
     "/pokemon-species/{name_or_id}": {
       "get": {
         "tags": ["Species"],
-        "summary": "Datos biográficos, textos descriptivos y enlace de evolución.",
+        "summary": "Datos biográficos, generación y evolución.",
         "parameters": [
           {
             "name": "name_or_id",
@@ -279,6 +279,10 @@
       "PokemonSpecies": {
         "type": "object",
         "properties": {
+          "generation": {
+            "description": "La generación en la que debutó esta especie.",
+            "$ref": "#/components/schemas/NamedAPIResource"
+          },
           "evolution_chain": {
             "type": "object",
             "properties": {
