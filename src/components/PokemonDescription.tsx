@@ -50,7 +50,7 @@ const PokemonDescription: React.FC<PokemonDescriptionProps> = ({
                 <span className="material-symbols-outlined text-lg">
                   history_edu
                 </span>
-                {generation.replace("generation-", "Generation ")}
+                {generation}
               </p>
             </div>
           </div>
