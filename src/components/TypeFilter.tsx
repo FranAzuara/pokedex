@@ -65,7 +65,7 @@ const TypeFilter: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center w-full py-5">
-      <div className="layout-content-container flex flex-col w-full max-w-[1200px] px-4 sm:px-8 md:px-16 lg:px-24">
+      <div className="layout-content-container flex flex-col w-full max-w-300 px-4 sm:px-8 md:px-16 lg:px-24">
         <div className="flex items-center justify-between px-4 pb-4">
           <h2 className="text-gray-900 dark:text-white text-xl font-bold">
             Filters
@@ -115,7 +115,7 @@ const TypeFilter: React.FC = () => {
                         onClick={() => toggleType(type)}
                         style={{ backgroundColor: TYPE_COLORS[type] }}
                         className={`
-                          px-1 py-2 rounded-lg text-white font-bold text-xs uppercase tracking-wider transition-all duration-200
+                          px-1 py-2 rounded-lg cursor-pointer text-white font-bold text-xs uppercase tracking-wider transition-all duration-200
                           ${isSelected ? "ring-2 ring-offset-2 ring-gray-400 dark:ring-gray-600 scale-105 shadow-md" : ""}
                           ${isActive ? "opacity-100" : "opacity-40 hover:opacity-60"}
                         `}
@@ -162,7 +162,7 @@ const TypeFilter: React.FC = () => {
                         key={gen}
                         onClick={() => toggleGen(gen)}
                         className={`
-                          px-2 py-2 rounded-lg font-medium text-xs transition-all duration-200 border
+                          px-2 py-2 rounded-lg cursor-pointer font-medium text-xs transition-all duration-200 border
                           ${
                             isSelected
                               ? "bg-primary text-white border-primary shadow-md scale-105"
