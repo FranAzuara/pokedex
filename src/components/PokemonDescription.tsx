@@ -35,7 +35,7 @@ const PokemonDescription: React.FC<PokemonDescriptionProps> = ({
             <p className="text-lg md:text-xl font-medium leading-normal mt-4 opacity-90 max-w-md">
               {description}
             </p>
-            <div className="flex flex-col gap-4 mt-8">
+            <div className="flex flex-wrap items-center justify-between gap-4 mt-8">
               <div className="flex gap-3">
                 {types.map((type) => (
                   <span
