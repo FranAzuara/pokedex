@@ -19,6 +19,8 @@
   --radius-full: 9999px;
   --radius-tech: 2px;
 
+  --animate-spin-slow: spin 8s linear infinite;
+
   --shadow-mechanical: 0 2px 0 0 rgba(0, 0, 0, 0.2);
   --shadow-mechanical-active: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
 }
@@ -52,6 +54,17 @@
 
   .tag-id {
     @apply border-l-4 bg-white dark:bg-slate-800 shadow-sm;
+  }
+
+  .bg-scanline {
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      transparent 50%,
+      rgba(0, 0, 0, 0.05) 50%,
+      rgba(0, 0, 0, 0.05)
+    );
+    background-size: 100% 4px;
   }
 }
 

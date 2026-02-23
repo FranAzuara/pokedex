@@ -109,30 +109,38 @@ const PokemonDamageRelations: React.FC<PokemonDamageRelationsProps> = ({
 
   return (
     <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-5">
-      <div className="layout-content-container flex flex-col max-w-240 flex-1 bg-white dark:bg-gray-900 rounded-3xl p-8 shadow-sm">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-          Damage Relations
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="layout-content-container flex flex-col max-w-240 flex-1 bg-white dark:bg-slate-900 border border-slate-tech/10 dark:border-white/10 p-8 shadow-sm">
+        <div className="flex items-center gap-3 mb-8">
+          <span className="material-symbols-outlined text-primary text-xl">shield</span>
+          <h2 className="text-sm font-mono font-black text-gray-900 dark:text-white uppercase tracking-[0.2em]">
+            Defensive Appraisal
+          </h2>
+          <div className="h-px flex-1 bg-slate-tech/5 dark:bg-white/5"></div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
           {([4, 2, 0.5, 0.25, 0] as const).map((multiplier) => {
             const typesInGroup = groupedEffectiveness[multiplier];
             if (typesInGroup.length === 0) return null;
 
             return (
-              <div key={multiplier}>
-                <h3
-                  className={`text-sm font-bold uppercase tracking-wider mb-3 ${labels[multiplier].color}`}
-                >
-                  {labels[multiplier].title}
-                </h3>
+              <div key={multiplier} className="flex flex-col gap-3">
+                <div className="flex items-center gap-2">
+                  <div className={`w-1 h-4 bg-current ${labels[multiplier].color}`}></div>
+                  <h3
+                    className={`text-[10px] font-mono font-black uppercase tracking-widest ${labels[multiplier].color}`}
+                  >
+                    {labels[multiplier].title}
+                  </h3>
+                </div>
                 <div className="flex flex-wrap gap-2">
                   {typesInGroup.map((type) => (
                     <span
                       key={type}
                       style={{ backgroundColor: TYPE_COLORS[type] }}
-                      className="px-3 py-1 rounded-lg text-white font-bold text-xs uppercase tracking-wider shadow-sm"
+                      className="px-3 py-0.5 text-white font-black text-[10px] uppercase tracking-tighter skew-x-[-10deg] shadow-sm"
                     >
-                      {type}
+                      <span className="skew-x-[10deg] block">{type}</span>
                     </span>
                   ))}
                 </div>

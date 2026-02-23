@@ -48,55 +48,59 @@ const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <nav
-      className="flex items-center justify-center space-x-2"
+      className="flex items-center justify-center py-12"
       aria-label="Pagination"
     >
-      <div className="flex flex-wrap items-center justify-center gap-2">
+      <div className="flex flex-wrap items-center justify-center gap-3">
         {/* Previous Page Button */}
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className=" cursor-pointer flex items-center justify-center size-10 rounded-full border border-gray-300 dark:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-700 dark:text-gray-300 bg-white/50 dark:bg-gray-900/50"
+          className="cursor-pointer flex items-center justify-center size-10 bg-white dark:bg-slate-900 border border-slate-tech/20 dark:border-white/10 text-primary disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm hover:border-primary group"
           aria-label="Previous page"
         >
-          <span className="material-symbols-outlined text-xl">
-            chevron_left
+          <span className="material-symbols-outlined transition-transform group-hover:-translate-x-1">
+            west
           </span>
         </button>
 
         {/* Page Number Buttons with Truncation */}
-        {pageNumbers.map((page, index) => (
-          <React.Fragment key={index}>
-            {typeof page === "number" ? (
-              <button
-                onClick={() => onPageChange(page)}
-                className={`cursor-pointer flex items-center justify-center size-10 rounded-full border text-sm font-medium transition-all ${
-                  currentPage === page
-                    ? "bg-primary border-primary text-white shadow-md scale-110"
-                    : "border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 bg-white/50 dark:bg-gray-900/50"
-                }`}
-                aria-label={`Page ${page}`}
-                aria-current={currentPage === page ? "page" : undefined}
-              >
-                {page}
-              </button>
-            ) : (
-              <span className="flex items-center justify-center size-8 text-gray-500 dark:text-gray-400">
-                {page}
-              </span>
-            )}
-          </React.Fragment>
-        ))}
+        <div className="flex gap-2">
+          {pageNumbers.map((page, index) => (
+            <React.Fragment key={index}>
+              {typeof page === "number" ? (
+                <button
+                  onClick={() => onPageChange(page)}
+                  className={`cursor-pointer flex items-center justify-center size-10 border font-mono font-black text-xs transition-all skew-x-[-8deg] ${
+                    currentPage === page
+                      ? "bg-primary border-transparent text-white shadow-mechanical scale-110 z-10"
+                      : "bg-white dark:bg-slate-900 border-slate-tech/20 dark:border-white/10 text-slate-tech/60 dark:text-white/40 hover:border-primary hover:text-primary"
+                  }`}
+                  aria-label={`Page ${page}`}
+                  aria-current={currentPage === page ? "page" : undefined}
+                >
+                  <span className="skew-x-[8deg] block">
+                    {String(page).padStart(2, "0")}
+                  </span>
+                </button>
+              ) : (
+                <div className="size-10 flex items-end justify-center pb-2 text-slate-tech/40 dark:text-white/20 font-mono text-xs tracking-widest">
+                  ...
+                </div>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
 
         {/* Next Page Button */}
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className=" cursor-pointer flex items-center justify-center size-10 rounded-full border border-gray-300 dark:border-gray-600 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-gray-700 dark:text-gray-300 bg-white/50 dark:bg-gray-900/50"
+          className="cursor-pointer flex items-center justify-center size-10 bg-white dark:bg-slate-900 border border-slate-tech/20 dark:border-white/10 text-primary disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm hover:border-primary group"
           aria-label="Next page"
         >
-          <span className="material-symbols-outlined text-xl">
-            chevron_right
+          <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">
+            east
           </span>
         </button>
       </div>
