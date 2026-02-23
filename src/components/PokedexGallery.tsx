@@ -113,7 +113,12 @@ const PokedexGallery: React.FC = () => {
           for (let i = 0; i < sortedPokemon.length; i += batchSize) {
             const batch = sortedPokemon.slice(i, i + batchSize);
             const batchResults = await Promise.all(
-              batch.map((p) => getPokemon(p.name)),
+              batch.map((p) => {
+                // Use the ID from the URL for a more reliable fetch,
+                // avoiding issues where species name !== pokemon name
+                const id = p.url.split("/").filter(Boolean).pop();
+                return getPokemon(id || p.name);
+              }),
             );
             if (!active) break;
             detailedPokemon.push(...batchResults);
