@@ -13,65 +13,55 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <div className="sticky top-0 z-50 w-full flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-1 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md shadow-sm">
-      <div className="layout-content-container flex flex-col max-w-240 flex-1">
-        <header className="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 dark:border-gray-700 px-6 py-3">
+    <div className="sticky top-0 z-50 w-full flex justify-center border-b-4 border-primary bg-background-light dark:bg-background-dark">
+      <div className="layout-content-container flex flex-col w-full max-w-7xl flex-1 px-4 sm:px-8">
+        <header className="flex items-center justify-between py-4">
           <Link
             to="/"
             onClick={closeMenu}
-            className="flex items-center gap-4 text-gray-900 dark:text-white"
+            className="flex items-center gap-3 text-gray-900 dark:text-white group"
           >
-            <div className="size-6 text-primary">
+            <div className="size-10 flex items-center justify-center bg-primary rounded-full shadow-lg group-hover:scale-110 transition-transform">
               <svg
+                className="size-6 text-white"
                 fill="currentColor"
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-12h2v4h-2zm0 6h2v2h-2z"></path>
-                <path
-                  d="M12 4c-4.41 0-8 3.59-8 8s3.59 8 8 8 8-3.59 8-8-3.59-8-8-8zm0 14.5c-3.58 0-6.5-2.92-6.5-6.5S8.42 5.5 12 5.5s6.5 2.92 6.5 6.5-2.92 6.5-6.5 6.5zM12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
-                  fill="#fff"
-                ></path>
-                <path
-                  d="M12 6.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"
-                  fill="#fff"
-                ></path>
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                <circle cx="12" cy="12" r="3" />
               </svg>
             </div>
-            <h2 className="text-lg font-bold leading-tight tracking-[-0.015em]">
-              PokéBlog
-            </h2>
-          </Link>
-          <nav className="hidden sm:flex flex-1 justify-end gap-8">
-            <div className="flex items-center gap-9">
-              <Link
-                className="text-sm font-medium leading-normal text-gray-800 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors"
-                to="/"
-              >
-                Home
-              </Link>
-              <Link
-                className="text-sm font-medium leading-normal text-gray-800 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors"
-                to="/pokedex"
-              >
-                Pokédex
-              </Link>
-              <Link
-                className="text-sm font-medium leading-normal text-gray-800 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors"
-                to="/comparator"
-              >
-                Comparator
-              </Link>
-              <Link
-                className="text-sm font-medium leading-normal text-gray-800 dark:text-gray-200 hover:text-primary dark:hover:text-primary transition-colors"
-                to="/blog"
-              >
-                Blog
-              </Link>
+            <div className="flex flex-col">
+              <h2 className="text-xl font-black leading-tight tracking-tighter uppercase italic">
+                Poké<span className="text-primary">Blog</span>
+              </h2>
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">
+                Data Archive v2.0
+              </span>
             </div>
+          </Link>
+
+          <nav className="hidden sm:flex items-center gap-8">
+            {[
+              { label: "Home", path: "/" },
+              { label: "Pokédex", path: "/pokedex" },
+              { label: "Comparator", path: "/comparator" },
+              { label: "Blog", path: "/blog" },
+            ].map((link) => (
+              <Link
+                key={link.path}
+                className="text-xs font-bold uppercase tracking-widest text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors relative group py-2"
+                to={link.path}
+              >
+                {link.label}
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full"></span>
+              </Link>
+            ))}
           </nav>
+
           <button
-            className="sm:hidden text-gray-800 dark:text-gray-200 cursor-pointer"
+            className="sm:hidden size-10 flex items-center justify-center bg-gray-100 dark:bg-gray-800 rounded border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 cursor-pointer"
             onClick={toggleMenu}
             aria-label="Toggle menu"
           >
@@ -80,36 +70,24 @@ const Navbar: React.FC = () => {
             </span>
           </button>
         </header>
+
         {isMenuOpen && (
-          <nav className="sm:hidden flex flex-col bg-background-light dark:bg-background-dark border-b border-gray-200 dark:border-gray-700 overflow-hidden transition-all duration-300">
-            <Link
-              to="/"
-              onClick={closeMenu}
-              className="px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors border-b border-gray-100 dark:border-gray-800 last:border-0"
-            >
-              Home
-            </Link>
-            <Link
-              to="/pokedex"
-              onClick={closeMenu}
-              className="px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors border-b border-gray-100 dark:border-gray-800 last:border-0"
-            >
-              Pokédex
-            </Link>
-            <Link
-              to="/comparator"
-              onClick={closeMenu}
-              className="px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors border-b border-gray-100 dark:border-gray-800 last:border-0"
-            >
-              Comparator
-            </Link>
-            <Link
-              to="/blog"
-              onClick={closeMenu}
-              className="px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            >
-              Blog
-            </Link>
+          <nav className="sm:hidden flex flex-col bg-background-light dark:bg-background-dark border-t border-gray-100 dark:border-gray-800 pb-4 animate-in slide-in-from-top duration-200">
+            {[
+              { label: "Home", path: "/" },
+              { label: "Pokédex", path: "/pokedex" },
+              { label: "Comparator", path: "/comparator" },
+              { label: "Blog", path: "/blog" },
+            ].map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                onClick={closeMenu}
+                className="px-4 py-4 text-xs font-bold uppercase tracking-widest text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors border-b border-gray-100 dark:border-gray-800 last:border-0"
+              >
+                {link.label}
+              </Link>
+            ))}
           </nav>
         )}
       </div>
