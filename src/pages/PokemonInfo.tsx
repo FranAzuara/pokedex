@@ -32,10 +32,11 @@ const PokemonInfo: React.FC = () => {
       if (!id) return;
       try {
         setLoading(true);
-        const [pokemonData, speciesData] = await Promise.all([
-          getPokemon(id),
-          getPokemonSpecies(id),
-        ]);
+        // Fetch species first to get the correct numeric ID for the Pokemon
+        // This handles cases where the 'id' param is a species name that doesn't match a Pokemon entry
+        const speciesData = await getPokemonSpecies(id);
+        const pokemonData = await getPokemon(speciesData.id);
+
         const evolutionChainData = await getEvolutionChainByUrl(
           speciesData.evolution_chain.url,
         );
@@ -43,6 +44,8 @@ const PokemonInfo: React.FC = () => {
         const evolutionNames = flattenEvolutionChain(evolutionChainData.chain);
         const evolutionDetails = await Promise.all(
           evolutionNames.map(async (name) => {
+            // Using getPokemon here is safe because we improved it with a fallback,
+            // but we could also fetch species first if we wanted to be extra careful.
             const data = await getPokemon(name);
             return {
               name: data.name,
