@@ -106,12 +106,31 @@ export async function getDamageRelations(type: string): Promise<TypeResponse> {
 
 /**
  * Fetches detailed information about a Pokemon.
+ * If fetching by name fails, it attempts to fetch via the species ID as a fallback.
+ * This handles cases like 'deoxys' or 'wormadam' where the species name does not
+ * directly match a Pokemon entry.
  * @param nameOrId The name or ID of the Pokemon.
  */
 export async function getPokemon(
   nameOrId: string | number,
 ): Promise<PokemonDetail> {
-  return fetchData<PokemonDetail>(`${BASE_URL}/pokemon/${nameOrId}`);
+  try {
+    return await fetchData<PokemonDetail>(`${BASE_URL}/pokemon/${nameOrId}`);
+  } catch (error) {
+    // If it's a name (not a numeric ID), try species fallback
+    if (typeof nameOrId === "string" && isNaN(Number(nameOrId))) {
+      try {
+        const species = await getPokemonSpecies(nameOrId);
+        return await fetchData<PokemonDetail>(
+          `${BASE_URL}/pokemon/${species.id}`,
+        );
+      } catch {
+        // If species also fails, throw the original error
+        throw error;
+      }
+    }
+    throw error;
+  }
 }
 
 /**
