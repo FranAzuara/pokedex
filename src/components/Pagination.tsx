@@ -48,7 +48,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <nav
-      className="flex items-center justify-center py-12"
+      className="flex items-center justify-center py-4"
       aria-label="Pagination"
     >
       <div className="flex flex-wrap items-center justify-center gap-3">
