@@ -66,44 +66,48 @@ const TypeFilter: React.FC = () => {
   return (
     <div className="flex flex-col items-center w-full py-5">
       <div className="layout-content-container flex flex-col w-full max-w-300 px-4 sm:px-8 md:px-16 lg:px-24">
-        <div className="flex items-center justify-between px-4 pb-4">
-          <h2 className="text-gray-900 dark:text-white text-xl font-bold">
-            Filters
-          </h2>
+        <div className="flex items-center justify-between px-2 pb-6">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-primary text-xl">tune</span>
+            <h2 className="text-sm font-mono font-black text-gray-900 dark:text-white uppercase tracking-[0.2em]">
+              Filter Matrix
+            </h2>
+          </div>
           {hasFilters && (
             <button
               onClick={clearFilters}
-              className="text-sm font-medium text-primary hover:underline"
+              className="text-[10px] font-mono font-black text-primary hover:text-red-600 uppercase tracking-widest flex items-center gap-1 cursor-pointer"
             >
-              Clear All
+              <span className="material-symbols-outlined text-xs">restart_alt</span>
+              Reset System
             </button>
           )}
         </div>
 
         <div className="flex flex-col md:flex-row gap-6">
           {/* Types Accordion */}
-          <div className="flex-1 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden h-fit">
+          <div className="flex-1 bg-white dark:bg-slate-900 border border-slate-tech/10 dark:border-white/10 shadow-sm overflow-hidden h-fit relative">
             <button
               onClick={() => setIsTypesOpen(!isTypesOpen)}
-              className="w-full flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+              className="w-full flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors border-b border-slate-tech/5 dark:border-white/5"
             >
-              <div className="flex items-center gap-2">
-                <span className="text-gray-900 dark:text-white font-bold">
-                  Filter by Type
+              <div className="flex items-center gap-3">
+                <span className="text-[11px] font-mono font-black text-gray-900 dark:text-white uppercase tracking-wider">
+                  Elemental Class
                 </span>
-                <span className="text-xs text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">
+                <span className="text-[9px] font-mono font-bold text-white bg-slate-tech/40 dark:bg-white/10 px-1.5 py-0.5">
                   {selectedTypes.length}/3
                 </span>
               </div>
               <span
-                className={`material-symbols-outlined transition-transform duration-300 ${isTypesOpen ? "rotate-180" : ""}`}
+                className={`material-symbols-outlined text-primary transition-transform duration-300 ${isTypesOpen ? "rotate-180" : ""}`}
               >
-                expand_more
+                keyboard_arrow_down
               </span>
             </button>
 
             {isTypesOpen && (
-              <div className="p-4 pt-0">
+              <div className="p-4 bg-slate-50/30 dark:bg-slate-800/10">
                 <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2">
                   {types.map((type) => {
                     const isSelected = selectedTypes.includes(type);
@@ -113,14 +117,16 @@ const TypeFilter: React.FC = () => {
                       <button
                         key={type}
                         onClick={() => toggleType(type)}
-                        style={{ backgroundColor: TYPE_COLORS[type] }}
+                        style={{ backgroundColor: isSelected ? TYPE_COLORS[type] : undefined }}
                         className={`
-                          px-1 py-2 rounded-lg cursor-pointer text-white font-bold text-xs uppercase tracking-wider transition-all duration-200
-                          ${isSelected ? "ring-2 ring-offset-2 ring-gray-400 dark:ring-gray-600 scale-105 shadow-md" : ""}
-                          ${isActive ? "opacity-100" : "opacity-40 hover:opacity-60"}
+                          px-1 py-2 text-[10px] font-black uppercase tracking-tighter transition-all duration-200 cursor-pointer skew-x-[-8deg] border
+                          ${isSelected
+                            ? "text-white border-transparent shadow-mechanical"
+                            : "bg-white dark:bg-slate-800 text-slate-tech/60 dark:text-white/40 border-slate-tech/10 dark:border-white/10 hover:border-primary/50"}
+                          ${isActive ? "opacity-100" : "opacity-30 hover:opacity-50"}
                         `}
                       >
-                        {type}
+                        <span className="skew-x-[8deg] block">{type}</span>
                       </button>
                     );
                   })}
@@ -130,28 +136,28 @@ const TypeFilter: React.FC = () => {
           </div>
 
           {/* Generations Accordion */}
-          <div className="flex-1 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden h-fit">
+          <div className="flex-1 bg-white dark:bg-slate-900 border border-slate-tech/10 dark:border-white/10 shadow-sm overflow-hidden h-fit relative">
             <button
               onClick={() => setIsGensOpen(!isGensOpen)}
-              className="w-full flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+              className="w-full flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors border-b border-slate-tech/5 dark:border-white/5"
             >
-              <div className="flex items-center gap-2">
-                <span className="text-gray-900 dark:text-white font-bold">
-                  Filter by Generation
+              <div className="flex items-center gap-3">
+                <span className="text-[11px] font-mono font-black text-gray-900 dark:text-white uppercase tracking-wider">
+                  Temporal Origin
                 </span>
-                <span className="text-xs text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">
+                <span className="text-[9px] font-mono font-bold text-white bg-slate-tech/40 dark:bg-white/10 px-1.5 py-0.5">
                   {selectedGens.length}/2
                 </span>
               </div>
               <span
-                className={`material-symbols-outlined transition-transform duration-300 ${isGensOpen ? "rotate-180" : ""}`}
+                className={`material-symbols-outlined text-primary transition-transform duration-300 ${isGensOpen ? "rotate-180" : ""}`}
               >
-                expand_more
+                keyboard_arrow_down
               </span>
             </button>
 
             {isGensOpen && (
-              <div className="p-4 pt-0">
+              <div className="p-4 bg-slate-50/30 dark:bg-slate-800/10">
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {generations.map((gen) => {
                     const isSelected = selectedGens.includes(gen);
@@ -162,19 +168,23 @@ const TypeFilter: React.FC = () => {
                         key={gen}
                         onClick={() => toggleGen(gen)}
                         className={`
-                          px-2 py-2 rounded-lg cursor-pointer font-medium text-xs transition-all duration-200 border
+                          px-2 py-1.5 flex flex-col items-center justify-center transition-all duration-200 border cursor-pointer skew-x-[-8deg]
                           ${
                             isSelected
-                              ? "bg-primary text-white border-primary shadow-md scale-105"
-                              : "bg-gray-50 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:border-primary/50"
+                              ? "bg-primary text-white border-transparent shadow-mechanical"
+                              : "bg-white dark:bg-slate-800 text-slate-tech/60 dark:text-white/40 border-slate-tech/10 dark:border-white/10 hover:border-primary/50"
                           }
-                          ${isActive ? "opacity-100" : "opacity-40 hover:opacity-60"}
+                          ${isActive ? "opacity-100" : "opacity-30 hover:opacity-50"}
                         `}
                       >
-                        {GENERATION_MAP[gen].split(" - ")[0]}
-                        <span className="block text-xs opacity-70">
-                          {GENERATION_MAP[gen].split(" - ")[1]}
-                        </span>
+                        <div className="skew-x-[8deg] flex flex-col items-center">
+                          <span className="text-[10px] font-black uppercase tracking-tighter">
+                            {GENERATION_MAP[gen].split(" - ")[0]}
+                          </span>
+                          <span className="text-[8px] font-bold opacity-70 uppercase tracking-widest">
+                            {GENERATION_MAP[gen].split(" - ")[1]}
+                          </span>
+                        </div>
                       </button>
                     );
                   })}

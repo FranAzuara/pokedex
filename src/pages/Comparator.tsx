@@ -15,7 +15,7 @@ import {
 } from "recharts";
 
 const STAT_NAMES = ["HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"];
-const CHART_COLORS = ["#ef4444", "#3b82f6", "#10b981"]; // Red, Blue, Green
+const CHART_COLORS = ["#22d3ee", "#f20d0d", "#facc15"]; // Cyan, Red, Yellow
 
 const Comparator: React.FC = () => {
   const [selectedPokemon, setSelectedPokemon] = useState<(PokemonDetail | null)[]>([null, null, null]);
@@ -67,38 +67,56 @@ const Comparator: React.FC = () => {
   const activePokemonCount = selectedPokemon.filter(Boolean).length;
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-gray-50 dark:bg-background-dark">
+    <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden bg-white dark:bg-slate-950">
       <div className="layout-container flex h-full grow flex-col">
         <main className="grow pb-12">
-          <div className="flex flex-col items-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-8">
+          <div className="flex flex-col items-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-12">
             <div className="layout-content-container flex flex-col max-w-5xl w-full">
-              <h1 className="text-gray-900 dark:text-white text-3xl font-bold leading-tight tracking-[-0.015em] mb-8 text-center">
-                Pokémon Comparator
-              </h1>
+              <div className="flex flex-col items-center mb-12">
+                <span className="text-[10px] font-mono font-black text-primary uppercase tracking-[0.4em] mb-2 animate-pulse">
+                  System.Analysis.Stats
+                </span>
+                <h1 className="text-gray-900 dark:text-white text-3xl font-mono font-black uppercase tracking-tight text-center">
+                  Statistical Confrontation
+                </h1>
+                <div className="w-24 h-1 bg-primary mt-4 skew-x-[-20deg]"></div>
+              </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                 {[0, 1, 2].map((i) => (
-                  <div key={i} className="flex flex-col">
-                    <div className="bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col min-h-[300px]">
-                      <h3 className="text-gray-900 dark:text-white text-lg font-bold mb-3 px-2">
-                        Slot {i + 1}
-                      </h3>
-                      <div className="border-2 border-gray-100 dark:border-gray-700 rounded-xl focus-within:border-primary/50 transition-all bg-gray-50/30 dark:bg-gray-900/10 hover:border-gray-200 dark:hover:border-gray-600">
+                  <div key={i} className="flex flex-col h-full">
+                    <div className="data-viewport bg-white dark:bg-slate-900 p-4 border border-slate-tech/20 dark:border-white/10 flex flex-col min-h-[380px] relative">
+                      {/* Corner Accents */}
+                      <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-primary/40"></div>
+                      <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-primary/40"></div>
+
+                      <div className="flex items-center justify-between mb-4 border-b border-slate-tech/10 dark:border-white/10 pb-2">
+                        <span className="text-[10px] font-mono font-black text-slate-tech/40 dark:text-white/30 uppercase tracking-widest">
+                          Unit.0{i + 1}
+                        </span>
+                        <div className="flex gap-1">
+                          <div className="w-1.5 h-1.5 bg-primary/40"></div>
+                          <div className="w-1.5 h-1.5 bg-slate-tech/20 dark:bg-white/10"></div>
+                        </div>
+                      </div>
+
+                      <div className="bg-slate-50 dark:bg-slate-800/50 border border-slate-tech/5 dark:border-white/5 p-1 mb-4">
                         <SearchBar
                           onSelect={(name) => handleSelect(i, name)}
-                          placeholder="Search Pokémon..."
+                          placeholder="INPUT_ID..."
                           hideHeader={true}
-                          className="w-full !px-0 !py-0"
+                          className="w-full !px-0 !py-0 !bg-transparent"
                         />
                       </div>
 
                       {loading[i] ? (
                         <div className="mt-8 flex flex-1 items-center justify-center">
-                          <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary"></div>
+                          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
                         </div>
                       ) : selectedPokemon[i] ? (
-                        <div className="mt-4 flex flex-col items-center flex-1">
-                          <div className="relative w-32 h-32 mb-4">
+                        <div className="mt-2 flex flex-col items-center flex-1">
+                          <div className="relative w-36 h-36 mb-4 group">
+                             <div className="absolute inset-0 bg-primary/5 rounded-full scale-0 group-hover:scale-100 transition-transform duration-500"></div>
                             <img
                               src={
                                 selectedPokemon[i]?.sprites.other?.[
@@ -107,7 +125,7 @@ const Comparator: React.FC = () => {
                                 selectedPokemon[i]?.sprites.front_default
                               }
                               alt={selectedPokemon[i]?.name}
-                              className="w-full h-full object-contain"
+                              className="w-full h-full object-contain relative z-10"
                             />
                             <button
                                onClick={() => {
@@ -115,42 +133,52 @@ const Comparator: React.FC = () => {
                                  next[i] = null;
                                  setSelectedPokemon(next);
                                }}
-                               className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 shadow-md hover:bg-red-600 transition-colors cursor-pointer"
+                               className="absolute -top-1 -right-1 bg-red-600 text-white w-6 h-6 flex items-center justify-center shadow-mechanical hover:bg-red-700 transition-colors cursor-pointer z-20"
                                title="Remove"
                             >
-                               <span className="material-symbols-outlined text-sm block">close</span>
+                               <span className="material-symbols-outlined text-sm">close</span>
                             </button>
                           </div>
-                          <p className="text-xl font-bold capitalize text-gray-900 dark:text-white mb-2">
+
+                          <p className="text-lg font-mono font-black uppercase text-gray-900 dark:text-white mb-3 tracking-tighter">
                             {selectedPokemon[i]?.name}
                           </p>
-                          <div className="flex gap-2 flex-wrap justify-center">
+
+                          <div className="flex gap-2 mb-4">
                             {selectedPokemon[i]?.types.map((t) => (
                               <span
                                 key={t.type.name}
-                                className="px-3 py-1 rounded-full text-xs font-bold uppercase bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600"
+                                className="px-2 py-0.5 text-[9px] font-mono font-black uppercase bg-slate-tech text-white skew-x-[-10deg]"
                               >
-                                {t.type.name}
+                                <span className="skew-x-[10deg] block">{t.type.name}</span>
                               </span>
                             ))}
                           </div>
 
-                          <div className="mt-4 w-full grid grid-cols-2 gap-2 text-xs">
+                          <div className="w-full grid grid-cols-1 gap-1.5">
                              {selectedPokemon[i]?.stats.map((s, si) => (
-                               <div key={si} className="flex justify-between px-2 py-1 bg-gray-50 dark:bg-gray-700/50 rounded">
-                                 <span className="text-gray-500 dark:text-gray-400 font-medium uppercase">{STAT_NAMES[si]}</span>
-                                 <span className="text-gray-900 dark:text-white font-bold">{s.base_stat}</span>
+                               <div key={si} className="flex flex-col">
+                                 <div className="flex justify-between text-[9px] font-mono font-bold mb-0.5">
+                                   <span className="text-slate-tech/50 dark:text-white/40 uppercase">{STAT_NAMES[si]}</span>
+                                   <span className="text-gray-900 dark:text-white">{s.base_stat}</span>
+                                 </div>
+                                 <div className="h-1 bg-slate-100 dark:bg-slate-800 relative overflow-hidden">
+                                    <div
+                                      className="absolute top-0 left-0 h-full bg-primary/60 transition-all duration-1000"
+                                      style={{ width: `${(s.base_stat / 255) * 100}%` }}
+                                    ></div>
+                                 </div>
                                </div>
                              ))}
                           </div>
                         </div>
                       ) : (
-                        <div className="mt-4 flex-1 flex flex-col items-center justify-center border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-xl p-8 text-center">
-                          <span className="material-symbols-outlined text-gray-300 dark:text-gray-600 text-5xl mb-2">
+                        <div className="mt-4 flex-1 flex flex-col items-center justify-center border border-dashed border-slate-tech/20 dark:border-white/10 p-8 text-center bg-slate-50/30 dark:bg-white/5">
+                          <span className="material-symbols-outlined text-slate-tech/20 dark:text-white/10 text-4xl mb-3">
                             add_circle
                           </span>
-                          <p className="text-sm text-gray-400 dark:text-gray-500">
-                            Search to add a Pokémon
+                          <p className="text-[10px] font-mono font-black text-slate-tech/40 dark:text-white/30 uppercase tracking-widest">
+                            awaiting_input
                           </p>
                         </div>
                       )}
@@ -160,17 +188,25 @@ const Comparator: React.FC = () => {
               </div>
 
               {error && (
-                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-xl mb-8 flex items-center gap-3">
-                  <span className="material-symbols-outlined">error</span>
-                  <p className="font-medium">{error}</p>
+                <div className="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-600 text-red-700 dark:text-red-400 px-4 py-3 mb-8 flex items-center gap-3 font-mono text-xs">
+                  <span className="material-symbols-outlined text-sm">warning</span>
+                  <p className="font-bold uppercase tracking-tight">{error}</p>
                 </div>
               )}
 
               {activePokemonCount >= 2 ? (
-                <div className="bg-white dark:bg-gray-800 rounded-3xl p-6 md:p-10 shadow-lg border border-gray-100 dark:border-gray-700">
-                  <h2 className="text-2xl font-bold text-center mb-8 text-gray-900 dark:text-white">
-                    Base Stats Confrontation
+                <div className="data-viewport bg-white dark:bg-slate-900 p-6 md:p-10 border border-slate-tech/20 dark:border-white/10 relative">
+                   <div className="absolute top-4 left-6 flex items-center gap-2">
+                      <div className="w-2 h-2 bg-primary animate-pulse"></div>
+                      <span className="text-[10px] font-mono font-black text-slate-tech/40 dark:text-white/30 uppercase tracking-[0.3em]">
+                        RADAR.VIZ_ACTIVE
+                      </span>
+                   </div>
+
+                  <h2 className="text-xl font-mono font-black text-center mb-12 text-gray-900 dark:text-white uppercase tracking-widest">
+                    Data Interrelation
                   </h2>
+
                   <div className="h-[450px] w-full">
                     <ResponsiveContainer width="100%" height="100%">
                       <RadarChart
@@ -179,10 +215,10 @@ const Comparator: React.FC = () => {
                         outerRadius="80%"
                         data={chartData}
                       >
-                        <PolarGrid stroke="#e2e8f0" />
+                        <PolarGrid stroke="rgba(100, 116, 139, 0.2)" />
                         <PolarAngleAxis
                           dataKey="subject"
-                          tick={{ fill: "#64748b", fontSize: 12, fontWeight: 600 }}
+                          tick={{ fill: "#64748b", fontSize: 10, fontWeight: 900, fontFamily: 'monospace' }}
                         />
                         <PolarRadiusAxis
                           angle={30}
@@ -199,39 +235,45 @@ const Comparator: React.FC = () => {
                                 dataKey={`p${index}`}
                                 stroke={CHART_COLORS[index]}
                                 fill={CHART_COLORS[index]}
-                                fillOpacity={0.4}
-                                strokeWidth={3}
+                                fillOpacity={0.2}
+                                strokeWidth={2}
                               />
                             ),
                         )}
                         <Tooltip
                           contentStyle={{
-                            backgroundColor: "#1f2937",
-                            border: "none",
-                            borderRadius: "12px",
+                            backgroundColor: "#0f172a",
+                            border: "1px solid rgba(255,255,255,0.1)",
                             color: "#fff",
-                            boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
+                            fontFamily: 'monospace',
+                            fontSize: '10px'
                           }}
-                          itemStyle={{ color: "#fff", textTransform: "capitalize" }}
+                          itemStyle={{ color: "#fff", textTransform: "uppercase", fontWeight: 'bold' }}
                         />
-                        <Legend wrapperStyle={{ paddingTop: "20px" }} />
+                        <Legend
+                          wrapperStyle={{
+                            paddingTop: "40px",
+                            fontFamily: 'monospace',
+                            fontSize: '10px',
+                            fontWeight: 'black'
+                          }}
+                        />
                       </RadarChart>
                     </ResponsiveContainer>
                   </div>
                 </div>
               ) : (
-                <div className="text-center py-24 bg-white dark:bg-gray-800 rounded-3xl border-2 border-dashed border-gray-200 dark:border-gray-700 shadow-sm">
-                  <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-700 mb-6">
-                    <span className="material-symbols-outlined text-4xl text-gray-400 dark:text-gray-500">
-                      compare_arrows
+                <div className="text-center py-24 bg-slate-50 dark:bg-slate-900/50 border border-dashed border-slate-tech/20 dark:border-white/10 relative">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-white dark:bg-slate-800 border border-slate-tech/10 dark:border-white/10 mb-6 rotate-45">
+                    <span className="material-symbols-outlined text-3xl text-slate-tech/30 dark:text-white/20 -rotate-45">
+                      analytics
                     </span>
                   </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                    Not enough Pokémon
+                  <h3 className="text-sm font-mono font-black text-gray-900 dark:text-white mb-2 uppercase tracking-widest">
+                    Insufficient Data
                   </h3>
-                  <p className="text-gray-500 dark:text-gray-400 max-w-sm mx-auto">
-                    Select at least 2 Pokémon (up to 3) to view their stats
-                    confronted in the radar chart.
+                  <p className="text-[10px] font-mono font-bold text-slate-tech/40 dark:text-white/30 max-w-xs mx-auto uppercase leading-relaxed">
+                    Minimum of 02 subjects required for comparative analysis.
                   </p>
                 </div>
               )}

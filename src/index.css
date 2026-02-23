@@ -2,19 +2,69 @@
 
 @theme {
   --color-primary: #f20d0d;
+  --color-accent: #22d3ee;
+  --color-slate-tech: #1e293b;
+  --color-lcd-bg: #f8fafc;
+  --color-warning: #f59e0b;
+
   --color-background-light: #f8f5f5;
   --color-background-dark: #221010;
-  --font-display: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  --font-display: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
   --radius-DEFAULT: 0.25rem;
   --radius-lg: 0.5rem;
   --radius-xl: 0.75rem;
   --radius-full: 9999px;
+  --radius-tech: 2px;
+
+  --animate-spin-slow: spin 8s linear infinite;
+
+  --shadow-mechanical: 0 2px 0 0 rgba(0, 0, 0, 0.2);
+  --shadow-mechanical-active: inset 0 2px 4px 0 rgba(0, 0, 0, 0.3);
 }
 
 @layer base {
   body {
     @apply bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200;
+  }
+}
+
+@layer utilities {
+  .data-viewport {
+    @apply relative border-2 border-slate-tech/20 dark:border-white/10 bg-lcd-bg dark:bg-slate-900/50 overflow-hidden;
+    background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+    background-size: 24px 24px;
+    background-position: center;
+    @apply text-slate-tech/5 dark:text-white/5;
+  }
+
+  .viewport-content {
+    @apply relative z-10 text-gray-900 dark:text-white;
+  }
+
+  .btn-mechanical {
+    @apply shadow-mechanical active:shadow-mechanical-active active:translate-y-[1px] transition-all;
+  }
+
+  .terminal-input {
+    @apply font-mono bg-slate-100 dark:bg-slate-900 border-b-2 border-slate-300 dark:border-slate-700 focus:border-accent outline-none transition-colors;
+  }
+
+  .tag-id {
+    @apply border-l-4 bg-white dark:bg-slate-800 shadow-sm;
+  }
+
+  .bg-scanline {
+    background: linear-gradient(
+      to bottom,
+      transparent,
+      transparent 50%,
+      rgba(0, 0, 0, 0.05) 50%,
+      rgba(0, 0, 0, 0.05)
+    );
+    background-size: 100% 4px;
   }
 }
 

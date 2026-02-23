@@ -28,25 +28,41 @@ const RandomPokemon: React.FC = () => {
   };
 
   return (
-    <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-5">
-      <div className="layout-content-container flex flex-col max-w-[960px] flex-1">
-        <div className="mx-4 flex flex-col items-center gap-4 py-8 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-          <h2 className="text-gray-900 dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em] text-center">
-            Random Pokémon
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 text-sm text-center px-4 font-medium">
-            Don't know which Pokémon to search for? Try your luck and discover one at random!
-          </p>
-          <button
-            onClick={handleRandom}
-            disabled={allPokemon.length === 0}
-            className="flex items-center gap-2 bg-primary hover:bg-primary/90 disabled:bg-gray-400 text-white px-10 py-3 rounded-lg font-bold transition-all transform hover:scale-105 active:scale-95 shadow-md border-none cursor-pointer"
-          >
-            <span className="material-symbols-outlined" aria-hidden="true">
-              casino
-            </span>
-            I'm Feeling Lucky
-          </button>
+    <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-8">
+      <div className="layout-content-container flex flex-col max-w-5xl flex-1">
+        <div className="mx-4 p-8 data-viewport rounded-2xl flex flex-col items-center gap-6 text-center border-2 border-slate-tech/10">
+          <div className="viewport-content flex flex-col items-center gap-4">
+            <div className="size-16 flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-full border-2 border-slate-200 dark:border-slate-700">
+              <span className="material-symbols-outlined text-3xl text-primary animate-spin-slow">
+                casino
+              </span>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <h2 className="text-gray-900 dark:text-white text-xl font-black uppercase tracking-tighter italic">
+                RNG Data Extraction
+              </h2>
+              <p className="text-gray-500 dark:text-gray-400 text-[10px] font-mono uppercase tracking-[0.2em]">
+                Unidentified Signal Detected
+              </p>
+            </div>
+
+            <p className="text-gray-600 dark:text-gray-400 text-sm max-w-md font-medium">
+              Initialize the random number generator to pull a random Pokémon
+              profile from the encrypted global archive.
+            </p>
+
+            <button
+              onClick={handleRandom}
+              disabled={allPokemon.length === 0}
+              className="btn-mechanical mt-2 flex items-center gap-3 bg-primary hover:brightness-110 disabled:bg-gray-400 text-white px-10 py-4 rounded-none font-black uppercase text-xs tracking-[0.2em] skew-x-[-12deg] transition-all cursor-pointer"
+            >
+              <span className="skew-x-[12deg] flex items-center gap-3">
+                <span className="material-symbols-outlined text-sm">bolt</span>
+                Execute Protocol
+              </span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
