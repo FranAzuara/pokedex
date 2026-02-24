@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { getPokemon } from "../services/pokemonService";
 import SearchBar from "../components/SearchBar";
 import type { PokemonDetail } from "../types/pokemon";
@@ -54,15 +54,17 @@ const Comparator: React.FC = () => {
     [key: string]: string | number;
   }
 
-  const chartData: ChartDataItem[] = STAT_NAMES.map((name, i) => {
-    const dataItem: ChartDataItem = { subject: name, fullMark: 255 };
-    selectedPokemon.forEach((pokemon, index) => {
-      if (pokemon) {
-        dataItem[`p${index}`] = pokemon.stats[i].base_stat;
-      }
+  const chartData: ChartDataItem[] = useMemo(() => {
+    return STAT_NAMES.map((name, i) => {
+      const dataItem: ChartDataItem = { subject: name, fullMark: 255 };
+      selectedPokemon.forEach((pokemon, index) => {
+        if (pokemon) {
+          dataItem[`p${index}`] = pokemon.stats[i].base_stat;
+        }
+      });
+      return dataItem;
     });
-    return dataItem;
-  });
+  }, [selectedPokemon]);
 
   const activePokemonCount = selectedPokemon.filter(Boolean).length;
 

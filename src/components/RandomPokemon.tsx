@@ -32,8 +32,8 @@ const RandomPokemon: React.FC = () => {
       <div className="layout-content-container flex flex-col max-w-5xl flex-1">
         <div className="mx-4 p-8 data-viewport rounded-2xl flex flex-col items-center gap-6 text-center border-2 border-slate-tech/10">
           <div className="viewport-content flex flex-col items-center gap-4">
-            <div className="size-16 flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-full border-2 border-slate-200 dark:border-slate-700">
-              <span className="material-symbols-outlined text-3xl text-primary animate-spin-slow">
+            <div className="size-16 flex items-center justify-center bg-slate-100 dark:bg-slate-800 rounded-full border-2 border-slate-200 dark:border-slate-700 animate-spin-slow">
+              <span className="material-symbols-outlined text-3xl text-primary">
                 casino
               </span>
             </div>

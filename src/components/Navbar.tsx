@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
+const NAV_LINKS = [
+  { label: "Home", path: "/" },
+  { label: "Pokédex", path: "/pokedex" },
+  { label: "Comparator", path: "/comparator" },
+  { label: "Blog", path: "/blog" },
+];
+
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -43,12 +50,7 @@ const Navbar: React.FC = () => {
           </Link>
 
           <nav className="hidden sm:flex items-center gap-8">
-            {[
-              { label: "Home", path: "/" },
-              { label: "Pokédex", path: "/pokedex" },
-              { label: "Comparator", path: "/comparator" },
-              { label: "Blog", path: "/blog" },
-            ].map((link) => (
+            {NAV_LINKS.map((link) => (
               <Link
                 key={link.path}
                 className="text-xs font-bold uppercase tracking-widest text-gray-600 dark:text-gray-400 hover:text-primary dark:hover:text-primary transition-colors relative group py-2"
@@ -73,12 +75,7 @@ const Navbar: React.FC = () => {
 
         {isMenuOpen && (
           <nav className="sm:hidden flex flex-col bg-background-light dark:bg-background-dark border-t border-gray-100 dark:border-gray-800 pb-4 animate-in slide-in-from-top duration-200">
-            {[
-              { label: "Home", path: "/" },
-              { label: "Pokédex", path: "/pokedex" },
-              { label: "Comparator", path: "/comparator" },
-              { label: "Blog", path: "/blog" },
-            ].map((link) => (
+            {NAV_LINKS.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}

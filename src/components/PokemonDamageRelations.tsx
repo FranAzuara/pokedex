@@ -7,6 +7,22 @@ interface PokemonDamageRelationsProps {
   types: string[];
 }
 
+const DAMAGE_LABELS: Record<number, { title: string; color: string }> = {
+  4: { title: "Weakness (4x)", color: "text-red-600 dark:text-red-400" },
+  2: { title: "Weakness (2x)", color: "text-red-500 dark:text-red-300" },
+  0.5: {
+    title: "Resistance (0.5x)",
+    color: "text-green-500 dark:text-green-300",
+  },
+  0.25: {
+    title: "Resistance (0.25x)",
+    color: "text-green-600 dark:text-green-400",
+  },
+  0: { title: "Immunity (0x)", color: "text-gray-500 dark:text-gray-400" },
+};
+
+const MULTIPLIERS_ORDER = [4, 2, 0.5, 0.25, 0] as const;
+
 const PokemonDamageRelations: React.FC<PokemonDamageRelationsProps> = ({
   types,
 }) => {
@@ -93,20 +109,6 @@ const PokemonDamageRelations: React.FC<PokemonDamageRelationsProps> = ({
   );
   if (!hasRelations) return null;
 
-  const labels: Record<number, { title: string; color: string }> = {
-    4: { title: "Weakness (4x)", color: "text-red-600 dark:text-red-400" },
-    2: { title: "Weakness (2x)", color: "text-red-500 dark:text-red-300" },
-    0.5: {
-      title: "Resistance (0.5x)",
-      color: "text-green-500 dark:text-green-300",
-    },
-    0.25: {
-      title: "Resistance (0.25x)",
-      color: "text-green-600 dark:text-green-400",
-    },
-    0: { title: "Immunity (0x)", color: "text-gray-500 dark:text-gray-400" },
-  };
-
   return (
     <div className="flex justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 py-5">
       <div className="layout-content-container flex flex-col max-w-240 flex-1 bg-white dark:bg-slate-900 border border-slate-tech/10 dark:border-white/10 p-8 shadow-sm">
@@ -119,18 +121,18 @@ const PokemonDamageRelations: React.FC<PokemonDamageRelationsProps> = ({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
-          {([4, 2, 0.5, 0.25, 0] as const).map((multiplier) => {
+          {MULTIPLIERS_ORDER.map((multiplier) => {
             const typesInGroup = groupedEffectiveness[multiplier];
             if (typesInGroup.length === 0) return null;
 
             return (
               <div key={multiplier} className="flex flex-col gap-3">
                 <div className="flex items-center gap-2">
-                  <div className={`w-1 h-4 bg-current ${labels[multiplier].color}`}></div>
+                  <div className={`w-1 h-4 bg-current ${DAMAGE_LABELS[multiplier].color}`}></div>
                   <h3
-                    className={`text-[10px] font-mono font-black uppercase tracking-widest ${labels[multiplier].color}`}
+                    className={`text-[10px] font-mono font-black uppercase tracking-widest ${DAMAGE_LABELS[multiplier].color}`}
                   >
-                    {labels[multiplier].title}
+                    {DAMAGE_LABELS[multiplier].title}
                   </h3>
                 </div>
                 <div className="flex flex-wrap gap-2">

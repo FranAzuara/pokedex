@@ -35,11 +35,12 @@ const PokemonInfo: React.FC = () => {
         // Fetch species first to get the correct numeric ID for the Pokemon
         // This handles cases where the 'id' param is a species name that doesn't match a Pokemon entry
         const speciesData = await getPokemonSpecies(id);
-        const pokemonData = await getPokemon(speciesData.id);
 
-        const evolutionChainData = await getEvolutionChainByUrl(
-          speciesData.evolution_chain.url,
-        );
+        // Fetch pokemon data and evolution chain in parallel once species is known
+        const [pokemonData, evolutionChainData] = await Promise.all([
+          getPokemon(speciesData.id),
+          getEvolutionChainByUrl(speciesData.evolution_chain.url),
+        ]);
 
         const evolutionNames = flattenEvolutionChain(evolutionChainData.chain);
         const evolutionDetails = await Promise.all(
