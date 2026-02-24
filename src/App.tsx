@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import ScrollToTop from "./components/ScrollToTop";
 
 const Home = lazy(() => import("./pages/Home"));
 const Pokedex = lazy(() => import("./pages/Pokedex"));
@@ -18,6 +19,7 @@ const PageLoader = () => (
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Navbar />
       <Suspense fallback={<PageLoader />}>
         <Routes>
