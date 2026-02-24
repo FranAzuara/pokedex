@@ -22,6 +22,11 @@ const PokedexGallery: React.FC = () => {
   const [totalCount, setTotalCount] = useState<number>(0);
 
   const galleryRef = useRef<HTMLDivElement>(null);
+  const isFirstRender = useRef(true);
+  const prevFiltersRef = useRef({
+    types: searchParams.get("types"),
+    gens: searchParams.get("generations"),
+  });
 
   useEffect(() => {
     let active = true;
@@ -141,10 +146,23 @@ const PokedexGallery: React.FC = () => {
         setTotalCount(count);
         setPokemonList(detailedPokemon);
 
-        // Scroll to top of gallery when page changes
-        if (galleryRef.current) {
+        // Scroll to top of gallery ONLY when page changes, NOT when filters change
+        // and NOT on initial load (ScrollToTop handles route changes)
+        const currentTypes = searchParams.get("types");
+        const currentGens = searchParams.get("generations");
+        const filtersChanged =
+          prevFiltersRef.current.types !== currentTypes ||
+          prevFiltersRef.current.gens !== currentGens;
+
+        if (galleryRef.current && !filtersChanged && !isFirstRender.current) {
           galleryRef.current.scrollIntoView({ behavior: "smooth" });
         }
+
+        prevFiltersRef.current = {
+          types: currentTypes,
+          gens: currentGens,
+        };
+        isFirstRender.current = false;
       } catch (err) {
         if (active) {
           setError("Failed to load Pokémon. Please try again later.");
