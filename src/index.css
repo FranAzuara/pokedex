@@ -11,7 +11,9 @@
   --color-background-dark: #221010;
 
   --font-display: "Be Vietnam Pro", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
 
   --radius-DEFAULT: 0.25rem;
   --radius-lg: 0.5rem;
@@ -34,7 +36,11 @@
 @layer utilities {
   .data-viewport {
     @apply relative border-2 border-slate-tech/20 dark:border-white/10 bg-lcd-bg dark:bg-slate-900/50 overflow-hidden;
-    background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+    background-image: radial-gradient(
+      circle,
+      currentColor 1px,
+      transparent 1px
+    );
     background-size: 24px 24px;
     background-position: center;
     @apply text-slate-tech/5 dark:text-white/5;
@@ -45,7 +51,7 @@
   }
 
   .btn-mechanical {
-    @apply shadow-mechanical active:shadow-mechanical-active active:translate-y-[1px] transition-all;
+    @apply shadow-mechanical active:shadow-mechanical-active active:translate-y-px transition-all;
   }
 
   .terminal-input {
@@ -70,8 +76,8 @@
 
 .material-symbols-outlined {
   font-variation-settings:
-    'FILL' 0,
-    'wght' 400,
-    'GRAD' 0,
-    'opsz' 24;
+    "FILL" 0,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
 }
